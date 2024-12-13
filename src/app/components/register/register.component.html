@@ -1,0 +1,62 @@
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<div class="mt-10"></div>
+
+
+<section class="bg-white min-h-screen flex items-center justify-center" style="font-family: 'Poppins', sans-serif;">
+  <div class="w-full max-w-lg bg-white rounded-lg shadow dark:border border-gray-700 p-10">
+    <div class="flex justify-center mb-6 ">
+      <img src="https://image.makewebeasy.net/makeweb/m_1920x0/7L4OqPuEK/DefaultData/LOGO_Shizen_png_160x160.png" alt="Logo" class="h-32">
+    </div>
+    <div class="space-y-5">
+      <h1 class="text-2xl font-bold leading-tight tracking-tight text-black text-center">
+        Create an account
+      </h1>
+      <form class="space-y-5" (ngSubmit)="register()">
+        <div>
+          <label for="profile_image" class="block mb-2 text-ml font-medium text-black">Profile Image</label>
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            id="profile_image"
+            class="bg-gray-200 border border-gray-300 text-black rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-3 text-sm"
+            required
+          />
+          <div *ngIf="previewImage" class="mt-4 flex justify-center">
+            <img [src]="previewImage" alt="Profile Preview" class="w-24 h-24 rounded-full border shadow-md" />
+          </div>
+        </div>
+        <div class="mt-4">
+          <label for="email" class="block mb-2 text-ml font-medium text-black">Your email</label>
+          <input type="email" [(ngModel)]="user.email" name="email" id="email" class="bg-gray-200 border border-gray-300 text-black rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-3 text-sm" placeholder= "name@company.com" required />
+        </div>
+        <div>
+          <label for="username" class="block mb-2 text-ml font-medium text-black">Username</label>
+          <input type="text" [(ngModel)]="user.username" name="username" id="username" class="bg-gray-200 border border-gray-300 text-black rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-3 text-sm" placeholder="Your username" required />
+        </div>
+        <div>
+          <label for="password" class="block mb-2 text-ml font-medium text-black">Password</label>
+          <input type="password" [(ngModel)]="user.password" name="password" id="password" class="bg-gray-200 border border-gray-300 text-black rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-3 text-sm" placeholder="••••••••" required />
+        </div>
+        <div>
+          <label for="first_name" class="block mb-2 text-ml font-medium text-black">First Name</label>
+          <input type="text" [(ngModel)]="user.first_name" name="first_name" id="first_name" class="bg-gray-200 border border-gray-300 text-black rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-3 text-sm" placeholder="First name" required />
+        </div>
+        <div>
+          <label for="last_name" class="block mb-2 text-ml font-medium text-black">Last Name</label>
+          <input type="text" [(ngModel)]="user.last_name" name="last_name" id="last_name" class="bg-gray-200 border border-gray-300 text-black rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-3 text-sm" placeholder="Last name" required />
+        </div>
+        <div class="flex items-start">
+        </div>
+        <button type="submit" class="bg-green-500 text-white w-96 flex justify-center rounded-lg py-2 text-base font-medium hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 mx-auto">
+            Create an account
+          </button>          
+        <p class="text-base font-light text-gray-600 text-center">
+          Already have an account? <a href="/login" class="font-medium text-green-600 hover:underline">Login here</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+<div class="mt-10"></div>
