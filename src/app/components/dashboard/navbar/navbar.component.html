@@ -1,0 +1,39 @@
+<!-- Navbar -->
+<div class="py-2 px-6 bg-white flex items-center shadow-md sticky top-0 left-0 z-30">
+  <!-- Hamburger Button -->
+  <button
+    (click)="toggleSidebar()"
+    class="hamburger-btn"
+    [class.open]="isSidebarOpen"
+  >
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+  </button>
+
+  <ul class="ml-auto flex items-center">
+    <li class="dropdown ml-3">
+      <button type="button" class="dropdown-toggle flex items-center">
+        <div class="flex-shrink-0 w-10 h-10 relative">
+          <div class="p-1 bg-white rounded-full">
+            <img
+              *ngIf="userProfile?.profile_image"
+              [attr.loading]="'lazy'"
+              class="h-8 w-8 rounded-full"
+              [src]="userProfile.profile_image.startsWith('http') 
+                ? userProfile.profile_image 
+                : 'http://localhost:5006/uploads/' + userProfile.profile_image"
+              alt="Profile Image"
+            />
+          </div>
+        </div>
+        <div class="p-2 text-left">
+          <h2 class="text-sm font-semibold text-gray-800">
+            {{ userProfile?.first_name || 'N/A' }} {{ userProfile?.last_name || 'N/A' }}
+          </h2>
+          <p class="text-xs text-gray-500">{{ userProfile?.role || 'N/A' }}</p>
+        </div>
+      </button>
+    </li>
+  </ul>
+</div>

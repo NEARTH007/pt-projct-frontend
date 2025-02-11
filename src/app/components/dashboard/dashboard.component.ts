@@ -1,54 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule],
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
+  standalone: true,
+  imports: [CommonModule, RouterModule, SidebarComponent, NavbarComponent],
 })
-export class DashboardComponent implements OnInit {
-  userProfile: any;
-  activeMenu: string = 'dashboard'; // Default active menu
+export class DashboardComponent {
+  isSidebarOpen: boolean = true;
 
-  constructor(private http: HttpClient, private router: Router) {}
-
-  ngOnInit() {
-    this.getUserProfile();
-  }
-
-  getUserProfile() {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    this.http
-      .get('http://localhost:5006/api/auth/profile', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .subscribe(
-        (response: any) => {
-          this.userProfile = response;
-        },
-        (error) => {
-          console.error('Error fetching user profile', error);
-          if (error.status === 403 || error.status === 401) {
-            this.router.navigate(['/login']);
-          }
-        }
-      );
-  }
-
-  setActiveMenu(menu: string): void {
-    this.activeMenu = menu; // Update the active menu
-  }
-
-  isActive(menu: string): boolean {
-    return this.activeMenu === menu; // Check if the menu is active
+  toggleSidebar(): void {
+    this.isSidebarOpen = !this.isSidebarOpen; // สลับสถานะ Sidebar
   }
 }

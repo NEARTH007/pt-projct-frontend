@@ -1,0 +1,120 @@
+<main class="w-full min-h-screen py-8 bg-gray-50 flex justify-center">
+  <div class="max-w-4xl w-full p-6 bg-white shadow-lg rounded-lg">
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <h2 class="text-3xl font-bold text-green-600">Edit Profile</h2>
+      <p class="text-gray-600 text-sm">
+        Update your personal information and profile picture
+      </p>
+    </div>
+
+   <!-- Profile Picture -->
+   <div class="flex justify-center mb-8">
+    <div class="relative">
+      <img
+        *ngIf="previewImage || userProfile.profilePicture"
+        class="object-cover w-36 h-36 rounded-full border-4 border-green-400 shadow-md"
+        [src]="previewImage || userProfile.profilePicture"
+        alt="Profile Image"
+      />
+      <button
+        class="absolute bottom-0 right-0 bg-green-500 text-white p-2 rounded-full shadow hover:bg-green-600"
+        (click)="onFileSelected($event)"
+        title="Change Picture"
+      >
+        <i class="fas fa-camera"></i>
+      </button>
+    </div>
+  </div>
+
+     <!-- Profile Form -->
+     <form (ngSubmit)="updateProfile()" class="space-y-6">
+      <!-- Profile Picture Upload -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700"
+          >Profile Picture</label
+        >
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          class="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-100 focus:ring-green-400 focus:border-green-400"
+        />
+      </div>
+
+      
+      <!-- Username -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Username</label>
+        <input
+          type="text"
+          class="w-full p-3 mt-1 bg-gray-50 border border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-green-400"
+          [(ngModel)]="userProfile.username"
+          name="username"
+          required
+        />
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Email</label>
+        <input
+          type="email"
+          class="w-full p-3 mt-1 bg-gray-50 border border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-green-400"
+          [(ngModel)]="userProfile.email"
+          name="email"
+          required
+        />
+      </div>
+
+      
+      <!-- First Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">First Name</label>
+        <input
+          type="text"
+          class="w-full p-3 mt-1 bg-gray-50 border border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-green-400"
+          [(ngModel)]="userProfile.firstName"
+          name="firstName"
+          required
+        />
+      </div>
+
+      <!-- Last Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Last Name</label>
+        <input
+          type="text"
+          class="w-full p-3 mt-1 bg-gray-50 border border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-green-400"
+          [(ngModel)]="userProfile.lastName"
+          name="lastName"
+          required
+        />
+      </div>
+
+     <!-- Role -->
+     <div>
+      <label class="block text-sm font-medium text-gray-700">Role</label>
+      <select
+        [(ngModel)]="userProfile.role"
+        name="role"
+        class="w-full p-3 mt-1 bg-gray-50 border border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-green-400"
+        required
+      >
+        <option value="User">User</option>
+        <option value="Admin">Admin</option>
+      </select>
+    </div>
+
+      
+      <!-- Submit Button -->
+      <div class="flex justify-end">
+        <button
+          type="submit"
+          class="px-6 py-3 bg-green-500 text-white rounded-lg text-base font-medium hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300"
+        >
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</main>

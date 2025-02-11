@@ -1,0 +1,110 @@
+<main class="w-full min-h-screen bg-gray-50 py-6">
+  <div class="max-w-7xl mx-auto bg-white shadow-md rounded-lg">
+    <!-- Header -->
+    <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
+      <h2 class="text-2xl font-bold text-green-600">Locations</h2>
+      <button
+        (click)="openAddModal()"
+        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300"
+      >
+        + Add Location
+      </button>
+    </div>
+
+    <!-- Location Table -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm text-left text-gray-600">
+        <thead class="text-xs text-white uppercase bg-green-500">
+          <tr>
+            <th class="px-4 py-3">ID</th>
+            <th class="px-4 py-3">Product Name</th>
+            <th class="px-4 py-3">Description</th>
+            <th class="px-4 py-3 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let location of locations"
+            class="border-b bg-white hover:bg-green-50 transition duration-300"
+          >
+            <td class="px-4 py-3 font-semibold text-gray-900">{{ location.id }}</td>
+            <td class="px-4 py-3">{{ location.name }}</td>
+            <td class="px-4 py-3">{{ location.description }}</td>
+            <td class="px-4 py-3 flex justify-center space-x-2">
+              <button
+                (click)="openEditModal(location)"
+                class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-1 px-3 rounded-lg transition duration-300"
+              >
+                Edit
+              </button>
+              <button
+                (click)="deleteLocation(location)"
+                class="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-3 rounded-lg transition duration-300"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- Add Modal -->
+<div
+  *ngIf="isAddModalOpen"
+  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+>
+  <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+    <h2 class="text-2xl font-semibold text-green-600 mb-4">Add Location</h2>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Name</label>
+      <input
+        type="text"
+        [(ngModel)]="newLocation.name"
+        class="w-full p-2 mt-1 border rounded-lg focus:ring-green-500 focus:border-green-500"
+      />
+    </div>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <textarea
+        [(ngModel)]="newLocation.description"
+        class="w-full p-2 mt-1 border rounded-lg focus:ring-green-500 focus:border-green-500"
+      ></textarea>
+    </div>
+    <div class="flex justify-end space-x-2">
+      <button (click)="closeAddModal()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg">Cancel</button>
+      <button (click)="addLocation()" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div
+  *ngIf="isEditModalOpen"
+  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+>
+  <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+    <h2 class="text-2xl font-semibold text-green-600 mb-4">Edit Location</h2>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Name</label>
+      <input
+        type="text"
+        [(ngModel)]="editLocationData.name"
+        class="w-full p-2 mt-1 border rounded-lg focus:ring-green-500 focus:border-green-500"
+      />
+    </div>
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">Description</label>
+      <textarea
+        [(ngModel)]="editLocationData.description"
+        class="w-full p-2 mt-1 border rounded-lg focus:ring-green-500 focus:border-green-500"
+      ></textarea>
+    </div>
+    <div class="flex justify-end space-x-2">
+      <button (click)="closeEditModal()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg">Cancel</button>
+      <button (click)="editLocation()" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">Save</button>
+    </div>
+  </div>
+</div>

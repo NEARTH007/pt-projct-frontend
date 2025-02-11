@@ -1,0 +1,11 @@
+@media (min-width: 768px) and (max-width: 1024px) {
+    input {
+      font-size: 16px;
+      padding: 10px;
+    }
+  
+    .container {
+      width: 70%; /* ปรับขนาด Container */
+      margin: 0 auto;
+    }
+  }

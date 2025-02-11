@@ -51,7 +51,7 @@ export class LoginComponent {
         });
   
         // Redirecting to the dashboard
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/dashboard/dashboard-iotmap-device']);
       },
       (error) => {
         console.error('Login failed', error);

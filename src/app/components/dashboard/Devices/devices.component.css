@@ -1,0 +1,258 @@
+/* General Table Styles */
+th,
+td {
+  padding: 12px 8px; /* Consistent padding for all cells */
+  text-align: center; /* Center-align all content */
+  vertical-align: middle; /* Align content in the middle vertically */
+}
+
+/* Truncate Long Text in Cells */
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 85px; /* Limit cell width */
+}
+
+/* Table Actions Container */
+.table-actions {
+  display: flex;
+  justify-content: center; /* Center-align the buttons */
+  align-items: center; /* Vertically align buttons */
+  gap: 8px; /* Space between buttons */
+}
+
+/* Buttons in Actions Column */
+.table-actions button {
+  height: 36px; /* Standard height for uniformity */
+  padding: 0 12px; /* Add padding for consistent width */
+  font-size: 14px; /* Adjust text size */
+  border-radius: 6px; /* Rounded corners */
+  display: flex;
+  align-items: center; /* Align content vertically */
+  justify-content: center; /* Align content horizontally */
+  gap: 4px; /* Space between icon and text */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover transition */
+}
+
+.table-actions button:hover {
+  transform: scale(1.05); /* Slightly enlarge on hover */
+  background-color: #e0e0e0; /* Light background on hover */
+}
+
+.table-actions button:disabled {
+  opacity: 0.6; /* Dim disabled buttons */
+  cursor: not-allowed; /* Disable interaction */
+}
+
+/* Individual Button Colors */
+.bg-yellow-500 {
+  background-color: #f59e0b; /* Yellow */
+}
+.bg-yellow-500:hover {
+  background-color: #d97706; /* Darker yellow */
+}
+
+.bg-red-500 {
+  background-color: #ef4444; /* Red */
+}
+.bg-red-500:hover {
+  background-color: #dc2626; /* Darker red */
+}
+
+.bg-blue-500 {
+  background-color: #3b82f6; /* Blue */
+}
+.bg-blue-500:hover {
+  background-color: #2563eb; /* Darker blue */
+}
+
+.bg-green-500 {
+  background-color: #10b981; /* Green */
+}
+.bg-green-500:hover {
+  background-color: #059669; /* Darker green */
+}
+
+/* Images in Table */
+td img {
+  width: auto; /* ให้ปรับขนาดอัตโนมัติตามสัดส่วน */
+  height: 100px; /* เพิ่มความสูงขึ้น */
+  max-width: 100px; /* เพิ่มขนาดความกว้างสูงสุด */
+  aspect-ratio: 1 / 1; /* กำหนดสัดส่วนของกรอบ */
+  object-fit: contain; /* ให้แสดงภาพเต็มกรอบโดยไม่บิดเบี้ยว */
+  border-radius: 8px; /* มุมมน */
+  border: 1px solid #ddd; /* ขอบภาพ */
+  display: block; /* แก้ปัญหา inline spacing */
+  margin: auto; /* จัดให้อยู่ตรงกลางใน cell */
+  background-color: #f9f9f9; /* เพิ่มพื้นหลังสีเทาอ่อนในกรณีภาพเล็กกว่า */
+}
+
+
+/* Header Styling */
+th:first-child,
+td:first-child {
+  text-align: center;
+}
+
+.bg-gray-50 {
+  background-color: #f9f9f9; /* Light gray background for table */
+}
+
+/* Material Icons Styling */
+.material-icons {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.material-icons:hover {
+  transform: scale(1.2); /* Slightly enlarge on hover */
+  color: #2196f3; /* Change color to blue */
+}
+
+/* เพิ่มขนาดและพื้นหลังสำหรับ View on Map */
+.view-on-map-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* ช่องว่างระหว่างไอคอนและข้อความ */
+  height: auto; /* ให้ความสูงปรับตามเนื้อหา */
+  padding: 10px 20px; /* เพิ่ม padding สำหรับเนื้อหา */
+  font-size: 18px; /* ขนาดตัวอักษรใหญ่ขึ้น */
+  border-radius: 10px; /* มุมมน */
+  background-color: #10b981; /* สีพื้นหลัง */
+  color: #ffffff; /* สีข้อความ */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+  transition: transform 0.3s ease, background-color 0.3s ease; /* การเปลี่ยนแปลง */
+  width: fit-content; /* ขนาดตามเนื้อหา */
+}
+
+.view-on-map-btn:hover {
+  transform: scale(1.1); /* ขยายเมื่อ hover */
+  background-color: #059669; /* พื้นหลังสีเขียวเข้มเมื่อ hover */
+}
+
+.view-on-map-btn i {
+  font-size: 1.8rem; /* เพิ่มขนาดไอคอน */
+}
+
+.view-on-map-btn span {
+  font-weight: bold; /* ทำให้ข้อความดูเด่น */
+  white-space: nowrap; /* ป้องกันข้อความตัด */
+}
+
+
+img {
+  object-fit: contain; /* แสดงรูปภาพแบบไม่บิดเบี้ยว */
+  max-width: 100%; /* ให้ความกว้างอยู่ในขอบเขต */
+  max-height: 24rem; /* กำหนดความสูงสูงสุด */
+  margin: auto; /* จัดตำแหน่งกลาง */
+  display: block; /* แก้ปัญหา inline space */
+  border-radius: 12px; /* มุมมน */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+  background-color: #f9f9f9; /* พื้นหลังสีเทาอ่อน */
+}
+
+
+/* General Offcanvas Styling */
+.offcanvas {
+  max-width: 550px;
+  width: 90%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* ให้ Header คงที่ */
+.offcanvas-header {
+  border-bottom: 2px solid #e5e7eb;
+  flex-shrink: 0;
+  padding: 16px;
+  background-color: white;
+}
+
+/* เปิด Scroll ได้ */
+.offcanvas-body {
+  padding: 16px;
+  overflow-y: auto;
+  flex-grow: 1;
+  max-height: calc(100vh - 80px);
+  background-color: #f9fafb;
+}
+
+/* จัดตำแหน่งรูปภาพ */
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.offcanvas img {
+  margin-top: 10px;
+  max-width: 80%;
+  max-height: 250px;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Grid Layout */
+.grid-cols-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+
+/* Section Styling */
+.section {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* หัวข้อของแต่ละส่วน */
+.section h6 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #374151;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ปรับแต่งข้อความข้อมูล */
+.section p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  color: #4b5563;
+}
+
+/* Description Styling */
+.description {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 2px solid #e5e7eb;
+}
+
+.description h6 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.description p {
+  font-size: 16px;
+  color: #4b5563;
+  line-height: 1.6;
+  white-space: pre-line;
+}

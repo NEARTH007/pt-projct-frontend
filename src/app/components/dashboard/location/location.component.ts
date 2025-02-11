@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service'; // Adjust the path to AuthService
+import { AuthService } from '../../../services/auth.service'; // Adjust the path to AuthService
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -17,10 +17,12 @@ export class LocationComponent implements OnInit {
   newLocation = { id: 0, name: '', description: '' };
   editLocationData = { id: 0, name: '', description: '' };
   selectedLocation: any = null;
-  userProfile: any = null;
 
   // Define activeMenu to handle active states
   activeMenu: string = 'location';
+
+  isAddModalOpen = false;
+  isEditModalOpen = false;
 
   constructor(private authService: AuthService, private router: Router, private http: HttpClient) {}
 
@@ -31,7 +33,6 @@ export class LocationComponent implements OnInit {
       return;
     }
     this.fetchLocations();
-    this.getUserProfile();
   }
 
   setActiveMenu(menu: string): void {
@@ -42,6 +43,16 @@ export class LocationComponent implements OnInit {
     return this.activeMenu === menu; // Check if the menu is active
   }
 
+  // เปิดโมดัล Add
+  openAddModal(): void {
+    this.newLocation = { id: 0, name: '', description: '' };
+    this.isAddModalOpen = true;
+  }
+
+  // ปิดโมดัล Add
+  closeAddModal(): void {
+    this.isAddModalOpen = false;
+  }
 
   loading = false; // Add a loading state
 
@@ -65,17 +76,21 @@ export class LocationComponent implements OnInit {
     document.getElementById('createProductModal')?.classList.remove('hidden');
   }
 
-  openEditModal(location: any): void {
+openEditModal(location: any): void {
     this.authService.getLocationById(location.id).subscribe(
       (data) => {
         this.editLocationData = { ...data };
-        document.getElementById('updateProductModal')?.classList.remove('hidden');
+        this.isEditModalOpen = true;
       },
       (error) => {
-        alert('Unable to fetch location data. Please try again.');
         console.error('Error fetching location data:', error);
       }
     );
+  }
+  
+  // ปิดโมดัล Edit
+  closeEditModal(): void {
+    this.isEditModalOpen = false;
   }
 
   openDeleteModal(location: any): void {
@@ -207,29 +222,4 @@ export class LocationComponent implements OnInit {
       });
   }
   
-  
-
-  getUserProfile(): void {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    this.http
-      .get('http://localhost:5006/api/auth/profile', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .subscribe(
-        (response: any) => {
-          this.userProfile = response;
-        },
-        (error) => {
-          console.error('Error fetching user profile', error);
-          if (error.status === 403 || error.status === 401) {
-            this.router.navigate(['/login']);
-          }
-        }
-      );
-  }
 }

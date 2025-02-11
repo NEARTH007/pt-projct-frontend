@@ -1,0 +1,63 @@
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  thead {
+    border-bottom: 2px solid #4caf50;
+  }
+  
+  thead th {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 12px;
+  }
+  
+  tbody tr {
+    transition: background-color 0.3s;
+  }
+  
+  tbody tr:hover {
+    background-color: #f4fff4;
+  }
+  
+  tbody td {
+    font-size: 14px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  button {
+    transition: background-color 0.2s ease;
+  }
+  
+  button:hover {
+    cursor: pointer;
+  }
+  
+  .bg-green-500 {
+    background-color: #4caf50;
+  }
+  
+  .bg-green-600 {
+    background-color: #43a047;
+  }
+  
+  .bg-red-500 {
+    background-color: #f44336;
+  }
+  
+  .bg-red-600 {
+    background-color: #e53935;
+  }
+  
+  .text-white {
+    color: #ffffff;
+  }
+  

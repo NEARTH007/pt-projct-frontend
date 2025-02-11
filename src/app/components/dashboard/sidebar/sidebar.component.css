@@ -1,0 +1,80 @@
+.sidebar-menu {
+  display: flex;
+  flex-direction: column; /* ให้ Sidebar เป็นคอลัมน์ */
+  width: 256px;
+  position: fixed;
+  top: 0;
+  left: 0; /* ชิดขอบซ้าย */
+  height: 100%;
+  background-color: #fff;
+  z-index: 10;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+  transform: translateX(-100%); /* ซ่อน Sidebar */
+  transition: transform 0.3s ease-in-out; /* Transition smooth */
+  padding: 0; /* ลบ Padding */
+  margin: 0; /* ลบ Margin */
+}
+
+.sidebar-menu.open {
+  transform: translateX(0); /* แสดง Sidebar */
+}
+
+.sidebar-menu .mt-auto {
+  margin-top: -120px; /* ดันปุ่ม Logout ขึ้นมา */
+}
+
+
+.sidebar-menu ul {
+  padding: 0; /* ลบ Padding รอบๆ รายการ */
+  margin: 0; /* ลบ Margin รอบๆ รายการ */
+}
+
+.sidebar-menu li {
+  list-style: none; /* ลบ bullet points */
+}
+
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #374151;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-menu a:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.sidebar-menu a.text-red-600 {
+  color: #ef4444;
+}
+
+.sidebar-menu a.text-red-600:hover {
+  background-color: #fee2e2;
+}
+
+.logout-container {
+  display: block;
+  position: relative;
+  margin-top: 180px; /* ปรับค่าเพิ่มระยะห่าง */
+}
+
+.flex-grow-0 {
+  height: 40px; /* ตัวแบ่งเพื่อดันเนื้อหาอื่น */
+}
+
+.sidebar-menu ul span {
+  display: block; /* เพื่อให้ `margin` มีผล */
+  margin-top: 7px; /* เพิ่มระยะห่างจากด้านบน */
+}
+
+.sidebar-menu img {
+  margin-left: 29px; /* เพิ่มระยะทางซ้าย */
+}
+
+
+

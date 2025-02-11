@@ -1,0 +1,132 @@
+<div class="map-container">
+  <div id="map"></div>
+</div>
+
+<div class="offcanvas offcanvas-end p-6 bg-white shadow-2xl rounded-lg"
+  style="max-width: 550px; width: 85%;" 
+  tabindex="-1"
+  id="offcanvasMapDetails"
+  aria-labelledby="offcanvasMapDetailsLabel"
+>
+  <!-- Header -->
+  <div class="offcanvas-header border-b pb-4 flex justify-between items-center">
+    <h5 id="offcanvasMapDetailsLabel" class="text-2xl font-bold text-gray-700 flex items-center gap-2">
+      <i class="material-icons text-blue-500">devices</i>
+      {{ selectedDevice?.name || "Device Details" }}
+    </h5>
+    <button type="button" class="btn-close text-gray-600 hover:text-gray-900" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+
+ <!-- รูปภาพอุปกรณ์ -->
+ <div class="image-container">
+  <img *ngIf="selectedDevice?.image_url" [src]="selectedDevice.image_url" alt="Device Image"
+    class="rounded-xl shadow-lg border border-gray-300 cursor-pointer max-w-full max-h-96"
+    (click)="openImageModal(selectedDevice.image_url)"
+  />
+</div>
+
+  <!-- Offcanvas Body -->
+  <div class="offcanvas-body space-y-6">
+
+    <!-- ข้อมูลทั่วไป -->
+    <div class="section">
+      <h6><i class="material-icons text-indigo-500">info</i> General Info</h6>
+      <div class="grid-cols-2">
+        <p><i class="material-icons">tag</i> <strong>ID:</strong> {{ selectedDevice?.id || "N/A" }}</p>
+        <p class="flex items-center">
+          <i class="material-icons mr-2"
+             [ngClass]="{
+               'text-blue-500': selectedDevice?.status === 'ใช้งานปกติ',
+               'text-gray-500': selectedDevice?.status === 'ใช้งานไม่ได้'
+             }">
+            cloud
+          </i> 
+          <strong class="text-gray-800 mr-2">Status:</strong>
+          <span [ngClass]="{
+            'text-green-500': selectedDevice?.status === 'ใช้งานปกติ',
+            'text-red-500': selectedDevice?.status === 'ใช้งานไม่ได้'
+          }">
+            {{ selectedDevice?.status || "N/A" }}
+          </span>
+        </p>        
+        <p><i class="material-icons">place</i> <strong>Latitude:</strong> {{ selectedDevice?.latitude || "N/A" }}</p>
+        <p><i class="material-icons">place</i> <strong>Longitude:</strong> {{ selectedDevice?.longitude || "N/A" }}</p>
+      </div>
+    </div>
+
+    <!-- ข้อมูลเพิ่มเติม -->
+    <div class="section">
+      <h6><i class="material-icons text-indigo-500">settings</i> Additional Details</h6>
+      <div class="grid-cols-2">
+        <p><i class="material-icons">bar_chart</i> <strong>Value 1:</strong> {{ selectedDevice?.value1 || "N/A" }}</p>
+        <p><i class="material-icons">bar_chart</i> <strong>Value 2:</strong> {{ selectedDevice?.value2 || "N/A" }}</p>
+      </div>
+    </div>
+
+    <!-- ข้อมูลผู้ใช้ (Added By & Updated By) -->
+    <div class="section">
+      <h6><i class="material-icons text-blue-500">person</i> User Information</h6>
+      <div class="grid-cols-2">
+        <div class="flex items-center">
+          <i class="material-icons text-green-500 mr-2">person_add</i>
+          <div>
+            <strong class="text-gray-800">Added By:</strong> 
+            <p class="text-gray-600">{{ selectedDevice?.added_by || "N/A" }}</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <i class="material-icons text-indigo-500 mr-2">edit</i>
+          <div>
+            <strong class="text-gray-800">Updated By:</strong> 
+            <p class="text-gray-600">{{ selectedDevice?.updated_by || "N/A" }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- เวลาที่สร้างและอัปเดต (Created At & Updated At) -->
+    <div class="section">
+      <h6><i class="material-icons text-gray-500">history</i> Timestamps</h6>
+      <div class="grid-cols-2">
+        <div class="flex items-center">
+          <i class="material-icons text-blue-500 mr-2">calendar_today</i>
+          <div>
+            <strong class="text-gray-800">Created At:</strong> 
+            <p class="text-gray-600">{{ selectedDevice?.created_at || "N/A" }}</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <i class="material-icons text-gray-500 mr-2">update</i>
+          <div>
+            <strong class="text-gray-800">Updated At:</strong> 
+            <p class="text-gray-600">{{ selectedDevice?.updated_at || "N/A" }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="description">
+      <h6><i class="material-icons text-blue-500">description</i> Description</h6>
+      <p>{{ selectedDevice?.description || "N/A" }}</p>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- ✅ Modal สำหรับขยายรูปภาพ -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="imageModalLabel">Device Image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img [src]="selectedImage" alt="Device Image" class="img-fluid rounded shadow" style="max-width: 100%;">
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div [class.open]="isSidebarOpen" class="sidebar-menu flex flex-col">
+  <a
+    routerLink="/dashboard/dashboard-iotmap-device"
+    class="flex border-b border-b-gray-300 py-1 px-11"
+  >
+    <img
+      src="https://image.makewebeasy.net/makeweb/m_1920x0/7L4OqPuEK/DefaultData/LOGO_Shizen_png_160x160.png"
+      alt="Logo"
+      class="h-34 w-36 ml-5"
+    />
+  </a>
+
+  <ul class="">
+    <li class="mb-1 group">
+      <span class="text-gray-500 font-bold py-2 px-3 mt-4">MANAGEMENT</span>
+      <!-- mt-4 เพิ่มระยะห่าง -->
+      <a
+        routerLink="/dashboard/board"
+        routerLinkActive="bg-gray-200 text-gray-900"
+        class="flex font-semibold items-center py-3 px-4 rounded-md"
+      >
+        <i class="ri-dashboard-line mr-3 mt-4 text-lg"></i>
+        <span class="text-ml">Board</span>
+      </a>
+    </li>
+
+    <li class="mb-1 group">
+      <a
+        routerLink="/dashboard/devices"
+        routerLinkActive="bg-gray-200 text-gray-900"
+        class="flex font-semibold items-center py-3 px-4 rounded-md"
+      >
+        <i class="bx bx-chip mr-3 text-lg"></i>
+        <span class="text-ml">Devices</span>
+      </a>
+    </li>
+    <li class="mb-1 group">
+      <a
+        routerLink="/dashboard/profile"
+        routerLinkActive="bg-gray-200 text-gray-900"
+        class="flex font-semibold items-center py-3 px-4 rounded-md"
+      >
+        <i class="bx bx-user mr-3 text-lg"></i>
+        <span class="text-ml">Profile</span>
+      </a>
+    </li>
+    <li class="mb-1 group">
+      <a
+        routerLink="/dashboard/user-management"
+        routerLinkActive="bg-gray-200 text-gray-900"
+        class="flex font-semibold items-center py-3 px-4 rounded-md"
+      >
+        <i class="bx bx-user mr-3 text-lg"></i>
+        <span class="text-ml">User Management</span>
+      </a>
+    </li>
+    <li class="mb-1 group">
+      <a
+        routerLink="/dashboard/dashboard-iotmap-device"
+        routerLinkActive="bg-gray-200 text-gray-900"
+        class="flex font-semibold items-center py-2 px-4 rounded-md"
+      >
+        <i class="ri-map-pin-line mr-3 text-lg"></i>
+        <span class="text-ml">Map</span>
+      </a>
+    </li>
+
+    <span class="text-gray-500 font-bold py-2 px-3">BLOG</span>
+    <li class="mb-1 group">
+      <a
+        href="#"
+        class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-100 rounded-md"
+      >
+        <i class="bx bxl-blogger mr-3 text-lg"></i>
+        <span class="text-ml">Post</span>
+      </a>
+    </li>
+    <li class="mb-1 group">
+      <a
+        href="#"
+        class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-100 rounded-md"
+      >
+        <i class="bx bx-archive mr-3 text-lg"></i>
+        <span class="text-ml">Archive</span>
+      </a>
+    </li>
+  </ul>
+
+  <hr class="logout-divider my-4" />
+
+  <div class="logout-container">
+    <a
+      (click)="logout()"
+      class="flex font-semibold items-center py-2 px-4 text-red-600 hover:bg-red-100 rounded-md cursor-pointer"
+    >
+      <i class="bx bx-log-out mr-3 text-lg"></i>
+      <span class="text-ml">Logout</span>
+    </a>
+  </div>
+</div>

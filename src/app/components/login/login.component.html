@@ -1,36 +1,47 @@
-<diV class="mt-"></diV>
-<section class="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center">
-  <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg p-10 w-full max-w-lg">
+<section class="bg-white dark:bg-gray-900 min-h-screen flex items-center justify-center px-4 md:px-20 lg:px-40">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 w-full max-w-lg md:max-w-xl">
+    <!-- Logo Section -->
     <div class="flex justify-center mb-6">
       <img
         src="https://image.makewebeasy.net/makeweb/m_1920x0/7L4OqPuEK/DefaultData/LOGO_Shizen_png_160x160.png"
         alt="Logo"
-        class="h-32"
+        class="h-32 md:h-40"
       />
     </div>
-    <h1 class="text-2xl font-bold text-black mb-6 text-left">Sign In</h1>
-    <form (ngSubmit)="login()">
-      <div class="mb-6">
-        <label class="block text-ml text-black">Email or Username</label>
+    
+    <!-- Title -->
+    <h1 class="text-2xl md:text-3xl font-bold text-black dark:text-white mb-6 text-left">Sign In</h1>
+    <!-- Login Form -->
+    <form (ngSubmit)="login()" class="space-y-6">
+      <!-- Email or Username -->
+      <div>
+        <label class="block text-base md:text-lg font-medium text-black dark:text-gray-300 mb-2"
+          >Email or Username</label
+        >
         <input
-          type="text"V
+          type="text"
           [(ngModel)]="emailOrUsername"
           name="emailOrUsername"
-          class="w-full bg-white border border-gray-300 text-black rounded-lg p-2 text-base"
+          autocomplete="off"
+          class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-black dark:text-white rounded-lg p-3 md:p-4 text-base md:text-lg"
+          placeholder="Enter your email or username"
           required
         />
       </div>
-      <div class="mb-6">
-        <label class="block text-ml text-black ">Password</label>
+      <!-- Password -->
+      <div>
+        <label class="block text-base md:text-lg font-medium text-black dark:text-gray-300 mb-2">Password</label>
         <input
           type="password"
           [(ngModel)]="password"
           name="password"
-          class="w-full bg-white border border-gray-300 rounded-lg p-2 text-base"
+          class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-black dark:text-white rounded-lg p-3 md:p-4 text-base md:text-lg"
+          placeholder="Enter your password"
           required
         />
       </div>
-      <div class="mb-6 flex items-center justify-between">
+      <!-- Remember Me -->
+      <div class="flex items-center justify-between">
         <div class="flex items-center">
           <input
             type="checkbox"
@@ -38,18 +49,14 @@
             name="rememberMe"
             class="mr-2 w-4 h-4"
           />
-          <label class="text-sm text-black">Remember Me</label>
+          <label class="text-sm md:text-base text-black dark:text-gray-300">Remember Me</label>
         </div>
-        <a
-          href="#"
-          class="text-sm text-slate-950 font-small hover:underline text-primary-600 dark:text-primary-500"
-          ></a
-        >
       </div>
+      <!-- Submit Button -->
       <div class="flex justify-center">
         <button
           type="submit"
-          class="bg-green-500 text-white w-full rounded-lg py-2 text-lg hover:bg-green-600"
+          class="bg-green-500 text-white w-full rounded-lg py-2 md:py-3 text-lg md:text-xl font-medium hover:bg-green-600 transition duration-200"
         >
           Sign In
         </button>
@@ -57,11 +64,11 @@
     </form>
     <!-- Registration Link -->
     <div class="mt-8 text-center">
-      <p class="text-base font-light text-gray-800">
+      <p class="text-base md:text-lg font-light text-gray-800 dark:text-gray-400">
         Don’t have an account yet?
         <a
           routerLink="/register"
-          class="font-medium text-primary-600 hover:underline text-green-400"
+          class="font-medium text-green-500 hover:underline"
           >Sign up</a
         >
       </p>
