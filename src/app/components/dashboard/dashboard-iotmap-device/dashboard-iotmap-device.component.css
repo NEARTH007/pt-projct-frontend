@@ -12,6 +12,30 @@
   overflow: hidden;
 }
 
+general-info-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 24px;
+  align-items: center;
+}
+
+.device-type-container,
+.status-container,
+.lat-long-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.device-type-text,
+.status-text,
+.lat-long-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 /* General Offcanvas Styling */
 .offcanvas {
   max-width: 550px;
@@ -31,7 +55,6 @@
   background-color: white;
 }
 
-/* เปิด Scroll ได้ */
 .offcanvas-body {
   padding: 16px;
   overflow-y: auto;
@@ -40,7 +63,7 @@
   background-color: #f9fafb;
 }
 
-/* จัดตำแหน่งรูปภาพ */
+
 .image-container {
   display: flex;
   justify-content: center;
@@ -65,7 +88,6 @@
   align-items: center;
 }
 
-/* Section Styling */
 .section {
   background-color: white;
   border-radius: 12px;
@@ -74,7 +96,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* หัวข้อของแต่ละส่วน */
+
 .section h6 {
   font-size: 18px;
   font-weight: bold;
@@ -116,3 +138,58 @@
   line-height: 1.6;
   white-space: pre-line;
 }
+
+.general-info-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* แบ่งเป็น 2 คอลัมน์เท่าๆ กัน */
+  gap: 12px 24px; /* กำหนดระยะห่างระหว่างแถวและคอลัมน์ */
+  align-items: center;
+}
+
+.device-type-container,
+.status-container,
+.lat-long-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* ระยะห่างระหว่างไอคอนกับข้อความ */
+}
+
+.device-type-text,
+.status-text,
+.lat-long-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* ตัดข้อความถ้ายาวเกิน */
+}
+
+
+.lat-long-container {
+  display: flex;
+  gap: 24px;
+}
+
+/* ปรับขนาด Modal */
+.modal-lg {
+  max-width: 45vw; /* ✅ ขยายขนาด Modal */
+}
+
+/* ✅ ปรับให้รูปอยู่กลางแนวตั้งและแนวนอน */
+.image-modal-container {
+  display: flex;
+  justify-content: center; /* ✅ จัดรูปให้อยู่ตรงกลางแนวนอน */
+  align-items: center; /* ✅ จัดรูปให้อยู่ตรงกลางแนวตั้ง */
+  padding: 20px; /* ✅ ให้ Padding ด้านบน-ล่างเท่ากัน */
+  min-height: 60vh;  /* ✅ ปรับให้ Modal มีความสูงที่เหมาะสม */
+}
+
+/* ✅ ปรับขนาดรูปภาพให้มีขนาดเท่ากัน */
+.image-modal {
+  width: 50vh;  /* ✅ กำหนดให้ภาพมีขนาดคงที่ */
+  height: 50vh;
+  max-width: 90vw; /* ป้องกันภาพใหญ่เกินไป */
+  max-height: 90vh;
+  object-fit: contain; /* ✅ ป้องกันภาพผิดสัดส่วน */
+  border-radius: 12px; /* ✅ เพิ่มขอบมน */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* ✅ เพิ่มเงาให้ภาพดูมีมิติ */
+}
+

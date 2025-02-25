@@ -256,3 +256,192 @@ img {
   line-height: 1.6;
   white-space: pre-line;
 }
+
+
+.device-type {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  gap: 6px; /* เพิ่มระยะห่างระหว่างไอคอนกับข้อความ */
+}
+
+
+/* 🟢 ปรับระยะห่างของฟอร์มให้สวยขึ้น */
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+  border-color: #3b82f6;
+  outline: none;
+}
+
+/* 🟢 ปรับปุ่มให้ดูสวยขึ้น */
+.btn-cancel {
+  padding: 10px 16px;
+  background-color: #e0e0e0;
+  color: #333;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+  background-color: #d6d6d6;
+}
+
+.btn-save {
+  padding: 10px 16px;
+  background-color: #10b981;
+  color: white;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-save:hover {
+  background-color: #059669;
+}
+
+/* 🟢 Scrollbar สำหรับ Sensor Values */
+.max-h-96 {
+  max-height: 24rem;
+  overflow-y: auto;
+}
+
+.max-h-96::-webkit-scrollbar {
+  width: 6px;
+}
+
+.max-h-96::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0;
+  border-radius: 4px;
+}
+
+.max-h-96::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+
+/* Header Table สีอ่อนขึ้น */
+thead {
+  background-color: #414a6a; /* ฟ้าอ่อน */
+  color: #0e0e0e; /* น้ำเงินเข้ม */
+}
+
+/* ปรับปุ่มให้ดูสดใสแต่ยังมืออาชีพ */
+.bg-green-500 { background-color: #16a34a; } /* เขียวสด */
+.bg-green-500:hover { background-color: #15803d; }
+
+.bg-blue-500 { background-color: #2563eb; } /* น้ำเงินสด */
+.bg-blue-500:hover { background-color: #1d4ed8; }
+
+.bg-red-500 { background-color: #dc2626; } /* แดงสด */
+.bg-red-500:hover { background-color: #b91c1c; }
+
+/* ปรับปุ่ม View on Map ให้ดูสดใส */
+.view-on-map-btn {
+  background-color: #3b82f6;
+  color: white;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.view-on-map-btn:hover {
+  background-color: #2563eb;
+  transform: scale(1.05);
+}
+
+/* ปรับสี Status Icons */
+.material-icons[style*="color: #3f8bdc"] { color: #0ea5e9 !important; } /* Cloud ปกติ */
+.material-icons[style*="color: #d32f2f"] { color: #f43f5e !important; } /* Cloud Offline */
+
+/* Background Table ให้ดูสว่างขึ้น */
+.bg-gray-50 { background-color: #f9fafb; } /* เทาอ่อน */
+.bg-white { background-color: #ffffff; }
+
+/* เงาให้รูปภาพมีมิติ */
+td img {
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* เพิ่ม Hover Effect ให้แถวในตาราง */
+tbody tr:hover {
+  background-color: #eef2ff; /* ฟ้าอ่อน */
+  transition: background-color 0.3s ease;
+}
+.general-info-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* แบ่งเป็น 2 คอลัมน์เท่าๆ กัน */
+  gap: 12px 24px; /* กำหนดระยะห่างระหว่างแถวและคอลัมน์ */
+  align-items: center;
+}
+
+.device-type-container,
+.status-container,
+.lat-long-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* ระยะห่างระหว่างไอคอนกับข้อความ */
+}
+
+.device-type-text,
+.status-text,
+.lat-long-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* ตัดข้อความถ้ายาวเกิน */
+}
+
+.lat-long-container {
+  display: flex;
+  gap: 24px; /* ให้ Latitude กับ Longitude มีระยะห่างพอดี */
+}
+
+.modal-xxl {
+  max-width: 45vw; /* ขยาย modal ให้ใหญ่ขึ้นเกือบเต็มจอ */
+}
+
+.image-modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 60vh; /* ให้ modal มีความสูงมากขึ้น */
+}
+
+.image-modal {
+  width: 50vh;  /* กำหนดให้ภาพมีขนาดคงที่แบบสี่เหลี่ยมจัตุรัส */
+  height: 50vh;
+  max-width: 90vw; /* ป้องกันภาพใหญ่เกินไป */
+  max-height: 90vh;
+  object-fit: contain; /* ป้องกันการบิดเบี้ยวของภาพ */
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* เพิ่มเงาให้ภาพดูมีมิติ */
+}
+
+/* 🟢 ปรับขนาดของ Modal ให้ดูสมดุล */
+.max-w-lg {
+  max-width: 36rem;
+}
+
+/* 🟢 ปรับขนาดของ Preview Image */
+.preview-image {
+  max-width: 150px;
+  max-height: 150px;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  padding: 5px;
+  background-color: #f9f9f9;
+}
+
+/* ปุ่ม Remove Image */
+button.absolute {
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}

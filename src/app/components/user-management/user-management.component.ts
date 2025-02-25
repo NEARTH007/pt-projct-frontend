@@ -14,11 +14,12 @@ import { Router } from '@angular/router';
 })
 export class UserManagementComponent implements OnInit {
   users: any[] = [];
-  userProfile: any = {}; // ประกาศตัวแปร userProfile ที่ใช้จัดเก็บข้อมูลโปรไฟล์
+  userProfile: any = {};
   selectedUser: any = { id: null, username: '', email: '', role: '' };
   newUser: any = { username: '', email: '', password: '', role: 'User', first_name: '', last_name: '', profile_image: null };
   isAddModalOpen: boolean = false;
   isEditModalOpen: boolean = false;
+  isDetailModalOpen: boolean = false;
   previewImage: string | ArrayBuffer | null = null;
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -87,23 +88,46 @@ export class UserManagementComponent implements OnInit {
 
   openEditModal(user: any) {
     this.selectedUser = { ...user };
-    // ตรวจสอบว่ารูปภาพมาจาก URL หรือ path
+  
+    // ✅ เช็คว่ามีรูปภาพไหม ถ้ามีให้ใช้ URL ที่ถูกต้อง
     this.selectedUser.profile_image = user.profile_image
       ? user.profile_image.startsWith('http')
         ? user.profile_image
         : `http://localhost:5006/uploads/${user.profile_image}`
       : 'assets/default-profile.png';
+  
     this.isEditModalOpen = true;
   }
   
+  openDetailModal(user: any) {
+    this.selectedUser = { ...user };
+    this.isDetailModalOpen = true;
+  }
+
+  isImageModalOpen = false;
+selectedImage: string = '';
+
+openImageModal(imagePath: string) {
+  this.selectedImage = imagePath.startsWith('http')
+    ? imagePath
+    : 'http://localhost:5006/uploads/' + imagePath;
+  this.isImageModalOpen = true;
+}
+
+closeImageModal() {
+  this.isImageModalOpen = false;
+}
+
   
 
   closeModals() {
     this.isAddModalOpen = false;
     this.isEditModalOpen = false;
+    this.isDetailModalOpen = false; // ← ต้องเพิ่มบรรทัดนี้
     this.selectedUser = { id: null, username: '', email: '', role: '' };
     this.newUser = { username: '', email: '', password: '', role: 'User', first_name: '', last_name: '', profile_image: null };
   }
+  
 
   // Handle file selection for profile image
   onFileSelected(event: any) {
@@ -127,15 +151,14 @@ export class UserManagementComponent implements OnInit {
     if (file) {
       this.selectedUser.profile_image = file;
   
+      // ✅ แสดง Preview รูปภาพใหม่
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
-        this.previewImage = e.target?.result || null;
+        this.selectedUser.profile_image_preview = e.target?.result || null;
       };
       reader.readAsDataURL(file);
     }
   }
-  
-  
   
   
 
@@ -183,14 +206,16 @@ export class UserManagementComponent implements OnInit {
     formData.append('role', this.selectedUser.role);
     formData.append('first_name', this.selectedUser.first_name);
     formData.append('last_name', this.selectedUser.last_name);
-    if (this.selectedUser.profile_image) {
+  
+    // ✅ เช็คว่ามีไฟล์รูปภาพใหม่หรือไม่
+    if (this.selectedUser.profile_image && this.selectedUser.profile_image instanceof File) {
       formData.append('profile_image', this.selectedUser.profile_image);
     }
   
     this.authService.updateUser(this.selectedUser.id, formData).subscribe(
       () => {
         Swal.fire('Updated!', 'User has been updated.', 'success').then(() => {
-          window.location.reload(); // รีหน้า
+          window.location.reload();
         });
       },
       (error) => {
@@ -200,7 +225,7 @@ export class UserManagementComponent implements OnInit {
     );
   }
   
-
+  
   // Delete user
   deleteUser(user: any) {
     Swal.fire({

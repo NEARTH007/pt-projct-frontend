@@ -14,9 +14,17 @@ import { HttpClient } from '@angular/common/http';
 export class SidebarComponent {
   @Input() isSidebarOpen: boolean = true;
   activeMenu: string = 'dashboard';
+  userProfile: any = { role: '' }; // ✅ ป้องกัน Undefined
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  ngOnInit() {
+    this.authService.getUserProfile().subscribe(user => {
+      console.log("🔍 Sidebar Received User:", user);
+      this.userProfile = user || { role: '' };
+    });
+  }
+  
   setActiveMenu(menu: string): void {
     this.activeMenu = menu;
   }

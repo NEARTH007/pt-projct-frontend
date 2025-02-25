@@ -1,19 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router'; // ✅ เพิ่ม RouterModule
 
 @Component({
   selector: 'app-navbar',
-  imports: [CommonModule ],
+  imports: [CommonModule, RouterModule], // ✅ เพิ่ม RouterModule ใน imports
   standalone: true,
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  @Output() sidebarToggle = new EventEmitter<void>(); // ส่ง Event ไปยัง Dashboard
+  @Output() sidebarToggle = new EventEmitter<void>();
   userProfile: any;
-  @Input() isSidebarOpen: boolean = false; // รับค่าจาก Parent
+  @Input() isSidebarOpen: boolean = false;
+
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit() {
@@ -21,7 +22,7 @@ export class NavbarComponent {
   }
 
   toggleSidebar(): void {
-    this.sidebarToggle.emit(); // ส่ง Event เพื่อเปิด/ปิด Sidebar
+    this.sidebarToggle.emit();
   }
 
   getUserProfile() {

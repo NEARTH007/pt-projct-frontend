@@ -36,7 +36,7 @@ export class ProfileComponent implements OnInit {
       return;
     }
 
-    this.authService.getUserProfile(token).subscribe(
+    this.authService.getUserProfile().subscribe(
       (response: any) => {
         this.userProfile = {
           id: response.id,
@@ -53,6 +53,21 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
+
+  isImageModalOpen = false;
+selectedImage: string = '';
+
+openImageModal(imagePath: string) {
+  this.selectedImage = imagePath.startsWith('http')
+    ? imagePath
+    : 'http://localhost:5006/uploads/' + imagePath;
+  this.isImageModalOpen = true;
+}
+
+closeImageModal() {
+  this.isImageModalOpen = false;
+}
+
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files?.[0] || null;

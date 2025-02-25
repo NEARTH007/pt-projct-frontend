@@ -6,11 +6,12 @@
     >
       <h2 class="text-2xl font-bold text-gray-00">Devices</h2>
       <button
-        (click)="openCreateModal()"
-        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300"
-      >
-        + Add Device
-      </button>
+      *ngIf="userProfile?.role === 'Admin'"
+      (click)="openCreateModal()"
+      class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300"
+    >
+      + Add Device
+    </button>    
     </div>
 
     <!-- Device Table -->
@@ -24,9 +25,9 @@
             <th class="px-6 py-3 w-2/12 text-center">Image</th>
             <th class="px-6 py-3 w-2/12 text-center">Latitude</th>
             <th class="px-6 py-3 w-2/12 text-center">Longitude</th>
+            <th class="px-6 py-3 w-2/12 text-center">Device Type</th>
+            <!-- ✅ เพิ่ม Device Type -->
             <th class="px-6 py-3 w-1/12 text-center">Status</th>
-            <th class="px-6 py-3 w-1/12 text-center">Value 1</th>
-            <th class="px-6 py-3 w-1/12 text-center">Value 2</th>
             <th class="px-6 py-3 w-3/12 text-center">Actions</th>
           </tr>
         </thead>
@@ -35,24 +36,34 @@
             *ngFor="let device of paginatedDevices; let index = index"
             class="border-b bg-white hover:bg-gray-100 transition duration-300"
           >
-          <td class="px-4 py-3 font-semibold text-gray-900">
-            {{ paginatedDevices ? ((currentPage - 1) * itemsPerPage + (index || 0) + 1) : '-' }}
-          </td>          
+            <td class="px-4 py-3 font-semibold text-gray-900">
+              {{
+                paginatedDevices
+                  ? (currentPage - 1) * itemsPerPage + (index || 0) + 1
+                  : "-"
+              }}
+            </td>
             <td class="px-4 py-3 font-semibold text-gray-900">
               {{ device.id }}
             </td>
             <td class="px-4 py-3">{{ device.name }}</td>
+        
+            <!-- รูปภาพในตาราง (Table) -->
             <td class="px-4 py-3">
               <img
                 *ngIf="device.image_url"
                 [src]="device.image_url"
-                alt="Device Image"
+                [alt]="device.name"
                 class="rounded-lg border border-gray-300 cursor-pointer"
-                (click)="openImageModal(device.image_url)"
+                (click)="openImageModal(device.image_url, device.name)"
               />
             </td>
+        
             <td class="px-4 py-3">{{ device.latitude }}</td>
             <td class="px-4 py-3">{{ device.longitude }}</td>
+            <td class="px-4 py-3 text-center whitespace-nowrap">
+              {{ device.device_type_name || "Unknown" }}
+            </td>
             <td class="px-4 py-3 text-center">
               <i
                 *ngIf="device.status === 'ใช้งานปกติ'"
@@ -69,23 +80,24 @@
                 cloud_off
               </i>
             </td>
-            <td class="px-4 py-3">{{ device.value1 || "N/A" }}</td>
-            <td class="px-4 py-3">{{ device.value2 || "N/A" }}</td>
             <td class="px-4 py-3 table-actions">
+              <!-- ✅ เฉพาะ Admin เท่านั้นที่เห็นปุ่ม Edit & Delete -->
               <button
+                *ngIf="userProfile?.role === 'Admin'"
                 class="bg-yellow-500 hover:bg-yellow-600 text-white font-medium rounded-lg transition mt-4"
                 (click)="openEditModal(device)"
               >
                 Edit
               </button>
-
               <button
+                *ngIf="userProfile?.role === 'Admin'"
                 class="bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition mt-4"
                 (click)="deleteDevice(device)"
               >
                 Delete
               </button>
-
+        
+              <!-- ✅ ทุกคน (Admin + User) เห็นปุ่ม View -->
               <button
                 class="bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition mt-4"
                 type="button"
@@ -93,7 +105,8 @@
               >
                 View
               </button>
-
+        
+              <!-- ✅ ทุกคน (Admin + User) เห็นปุ่ม View on Map -->
               <button
                 class="bg-green-500 hover:bg-green-600 text-white font-medium rounded-lg flex items-center gap-1 transition mt-4 view-on-map-btn"
                 (click)="viewDeviceOnMap(device)"
@@ -107,7 +120,7 @@
               </button>
             </td>
           </tr>
-        </tbody>
+        </tbody>        
       </table>
     </div>
 
@@ -147,92 +160,82 @@
 <!-- Add Modal -->
 <div
   *ngIf="isCreateModalOpen"
-  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+  class="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
 >
-  <div class="bg-white rounded-lg shadow-lg w-96 p-6">
-    <h2 class="text-2xl font-semibold text-green-600 mb-4">Add Device</h2>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Name</label>
-      <input
-        type="text"
-        [(ngModel)]="newDevice.name"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Description</label>
-      <textarea
-        [(ngModel)]="newDevice.description"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      ></textarea>
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Latitude</label>
-      <input
-        type="text"
-        [(ngModel)]="newDevice.latitude"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Longitude</label>
-      <input
-        type="text"
-        [(ngModel)]="newDevice.longitude"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700"
-        >Upload Image</label
-      >
-      <input
-        type="file"
-        (change)="onImageSelected($event, 'add')"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
+  <div class="bg-white rounded-lg shadow-lg w-[85%] max-w-lg p-6">
+    <h2 class="text-xl font-semibold text-blue-600 mb-4">Add Device</h2>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div class="col-span-2">
+        <label class="block text-sm font-medium text-gray-700">Name</label>
+        <input type="text" [(ngModel)]="newDevice.name" class="input-field p-2 rounded-md" />
+      </div>
+
+      <div class="col-span-2">
+        <label class="block text-sm font-medium text-gray-700">Description</label>
+        <textarea
+          [(ngModel)]="newDevice.description"
+          class="input-field p-2 rounded-md"
+          rows="2"
+        ></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Latitude</label>
+        <input type="text" [(ngModel)]="newDevice.latitude" class="input-field p-2 rounded-md" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Longitude</label>
+        <input type="text" [(ngModel)]="newDevice.longitude" class="input-field p-2 rounded-md" />
+      </div>
+
+      <div class="col-span-2">
+        <label class="block text-sm font-medium text-gray-700">Device Type</label>
+        <select [(ngModel)]="newDevice.deviceTypeId" class="input-field p-2 rounded-md">
+          <option value="" disabled selected>-- Select Device Type --</option>
+          <option *ngFor="let type of deviceTypes" [value]="type.id">
+            {{ type.name }}
+          </option>
+        </select>
+      </div>
+
+     <!-- Upload Image -->
+<div class="col-span-2">
+  <label class="block text-sm font-medium text-gray-700">Upload Image</label>
+  <input
+    type="file"
+    (change)="onImageSelected($event, 'add')"
+    class="input-field p-2 rounded-md"
+  />
+  
+  <!-- Preview Image -->
+  <div *ngIf="imagePreviewUrl" class="mt-3 flex justify-center relative">
+    <img [src]="imagePreviewUrl" alt="Preview" class="preview-image rounded-md shadow-md" />
+    
+    <!-- Remove Image Button -->
+    <button
+      (click)="removeImage()"
+      class="absolute top-0 right-0  text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md transform translate-x-1/2 -translate-y-1/2 hover:bg-red-600"
+    >
+      ❌
+    </button>
+  </div>
+</div>
+
+      <div class="col-span-2">
+        <label class="block text-sm font-medium text-gray-700">Status</label>
+        <select [(ngModel)]="newDevice.status" class="input-field p-2 rounded-md">
+          <option value="ใช้งานปกติ">ใช้งานปกติ</option>
+          <option value="ใช้งานไม่ได้">ใช้งานไม่ได้</option>
+        </select>
+      </div>
     </div>
 
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Value 1</label>
-      <input
-        type="text"
-        [(ngModel)]="newDevice.value1"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Value 2</label>
-      <input
-        type="text"
-        [(ngModel)]="newDevice.value2"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
-    </div>
-    
-    
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Status</label>
-      <select
-        [(ngModel)]="newDevice.status"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      >
-        <option value="ใช้งานปกติ">ใช้งานปกติ</option>
-        <option value="ใช้งานไม่ได้">ใช้งานไม่ได้</option>
-      </select>
-    </div>
-
-    <div class="flex justify-end space-x-2">
-      <button
-        (click)="closeModal('create')"
-        class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300"
-      >
-        Cancel
-      </button>
-      <button
-        (click)="addDevice()"
-        class="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
-      >
+    <!-- Buttons -->
+    <div class="flex justify-end space-x-2 mt-5">
+      <button (click)="closeModal('create')" class="btn-cancel px-4 py-2 rounded-md">Cancel</button>
+      <button (click)="addDevice()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md">
         Add
       </button>
     </div>
@@ -242,89 +245,117 @@
 <!-- Edit Modal -->
 <div
   *ngIf="isEditModalOpen"
-  class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
+  class="fixed inset-0 bg-black/35 z-50 flex items-center justify-center"
 >
-  <div class="bg-white rounded-lg shadow-lg w-96 p-6">
-    <h2 class="text-2xl font-semibold text-green-600 mb-4">Edit Device</h2>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Name</label>
-      <input
-        type="text"
-        [(ngModel)]="editDeviceData.name"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Description</label>
-      <textarea
-        [(ngModel)]="editDeviceData.description"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      ></textarea>
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Latitude</label>
-      <input
-        type="text"
-        [(ngModel)]="editDeviceData.latitude"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Longitude</label>
-      <input
-        type="text"
-        [(ngModel)]="editDeviceData.longitude"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700"
-        >Upload Image</label
-      >
-      <input
-        type="file"
-        (change)="onImageSelected($event, 'edit')"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
-    </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Status</label>
-      <select
-        [(ngModel)]="editDeviceData.status"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      >
-        <option value="ใช้งานปกติ">ใช้งานปกติ</option>
-        <option value="ใช้งานไม่ได้">ใช้งานไม่ได้</option>
-      </select>
+  <div class="bg-white rounded-lg shadow-lg w-[88%] max-w-[42rem] p-5">
+    <h2 class="text-xl font-semibold text-green-600 mb-3">Edit Device</h2>
+
+    <!-- ข้อมูลทั่วไป -->
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Name</label>
+        <input
+          type="text"
+          [(ngModel)]="editDeviceData.name"
+          class="input-field text-sm p-2.5 rounded-md"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Device Type</label>
+        <input
+          type="text"
+          [(ngModel)]="editDeviceData.device_type_name"
+          class="input-field bg-gray-100 cursor-not-allowed text-sm p-2.5 rounded-md"
+          readonly
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Latitude</label>
+        <input
+          type="text"
+          [(ngModel)]="editDeviceData.latitude"
+          class="input-field text-sm p-2.5 rounded-md"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Longitude</label>
+        <input
+          type="text"
+          [(ngModel)]="editDeviceData.longitude"
+          class="input-field text-sm p-2.5 rounded-md"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Status</label>
+        <select [(ngModel)]="editDeviceData.status" class="input-field text-sm p-2.5 rounded-md">
+          <option value="ใช้งานปกติ">ใช้งานปกติ</option>
+          <option value="ใช้งานไม่ได้">ใช้งานไม่ได้</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Upload Image</label>
+        <input
+          type="file"
+          (change)="onImageSelected($event, 'edit')"
+          class="input-field text-sm p-2.5 rounded-md"
+        />
+      </div>
+
+      <div class="col-span-2">
+        <label class="block text-sm font-medium text-gray-700">Description</label>
+        <textarea
+          [(ngModel)]="editDeviceData.description"
+          class="input-field text-sm p-2.5 rounded-md"
+        ></textarea>
+      </div>
     </div>
 
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Value 1</label>
-      <input
-        type="text"
-        [(ngModel)]="editDeviceData.value1"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
+    <!-- 🟢 Sensor Values Section -->
+    <div
+      class="bg-gray-50 p-3 rounded-lg shadow-md border border-gray-300 mt-4 max-h-64 overflow-y-auto"
+    >
+      <h3 class="text-base font-semibold text-gray-800 mb-2">Sensor Values</h3>
+
+      <table class="w-full text-sm text-left text-gray-700 border">
+        <thead class="bg-gray-300 text-white">
+          <tr>
+            <th class="px-3 py-2">Value Name</th>
+            <th class="px-3 py-2">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let value of editDeviceData.values; let i = index" class="border-b">
+            <td class="px-3 py-2">
+              <input
+                type="text"
+                [(ngModel)]="editDeviceData.values[i].value_name"
+                class="input-field bg-gray-100 cursor-not-allowed text-xs p-2 rounded-md"
+                readonly
+              />
+            </td>
+            <td class="px-3 py-2">
+              <input
+                type="text"
+                [(ngModel)]="editDeviceData.values[i].value"
+                class="input-field text-xs p-2 rounded-md"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700">Value 2</label>
-      <input
-        type="text"
-        [(ngModel)]="editDeviceData.value2"
-        class="w-full p-2 mt-1 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400"
-      />
-    </div>
-    
-    <div class="flex justify-end space-x-2">
-      <button
-        (click)="closeModal('edit')"
-        class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300"
-      >
-        Cancel
-      </button>
+
+    <!-- Buttons -->
+    <div class="flex justify-end space-x-2 mt-5">
+      <button (click)="closeModal('edit')" class="btn-cancel text-sm px-3 py-1.5 rounded-md">Cancel</button>
       <button
         (click)="editDevice()"
-        class="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
+        class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-3 py-1.5 rounded-md text-sm"
       >
         Save
       </button>
@@ -334,15 +365,21 @@
 
 
 
-<div class="offcanvas offcanvas-end p-6 bg-white shadow-2xl rounded-lg"
-  style="max-width:   550px; width: 90%; height: 100vh;" 
+<div
+  class="offcanvas offcanvas-end p-6 bg-white shadow-2xl rounded-lg"
+  style="max-width: 550px; width: 90%; height: 100vh"
   tabindex="-1"
   id="offcanvasRight"
   aria-labelledby="offcanvasRightLabel"
 >
   <!-- Header -->
-  <div class="offcanvas-header border-b pb-4 flex justify-between items-center sticky top-0 bg-white z-10">
-    <h5 id="offcanvasRightLabel" class="text-3xl font-bold text-gray-700 flex items-center gap-2">
+  <div
+    class="offcanvas-header border-b pb-4 flex justify-between items-center sticky top-0 bg-white z-10"
+  >
+    <h5
+      id="offcanvasRightLabel"
+      class="text-3xl font-bold text-gray-700 flex items-center gap-2"
+    >
       <i class="material-icons text-blue-500">devices</i>
       {{ selectedDevice?.name || "Device Details" }}
     </h5>
@@ -354,57 +391,77 @@
     ></button>
   </div>
 
-  <!-- รูปภาพอุปกรณ์ -->
+  <!-- รูปภาพใน Offcanvas -->
   <div class="flex justify-center items-center my-4">
     <img
       *ngIf="selectedDevice?.image_url"
       [src]="selectedDevice.image_url"
-      alt="Device Image"
+      [alt]="selectedDevice.name"
       class="rounded-xl shadow-lg border border-gray-300 cursor-pointer max-w-full max-h-72"
-      (click)="openImageModal(selectedDevice.image_url)"
+      (click)="openImageModal(selectedDevice.image_url, selectedDevice.name)"
     />
   </div>
 
-  <div class="offcanvas-body overflow-y-auto space-y-6" style="max-height: calc(100vh - 100px); padding-bottom: 20px;">
+  <div
+    class="offcanvas-body overflow-y-auto space-y-6"
+    style="max-height: calc(100vh - 100px); padding-bottom: 20px"
+  >
     <!-- ข้อมูลทั่วไป -->
     <div class="bg-gray-50 p-6 rounded-lg shadow-md">
       <h6 class="text-2xl font-semibold text-gray-700 flex items-center gap-2">
         <i class="material-icons text-green-500">info</i>
         General Info
       </h6>
-      <div class="mt-4 grid grid-cols-2 gap-x-6 gap-y-4 text-base">
+
+      <div class="general-info-container mt-4">
+        <!-- NO และ ID -->
         <p class="flex items-center">
-          <i class="material-icons text-blue-500 mr-2">label</i> 
-          <strong class="text-gray-800 mr-2">NO:</strong> {{ selectedDevice?.no || "N/A" }}
+          <i class="material-icons text-blue-500 mr-2">label</i>
+          <strong class="text-gray-800 mr-1">NO:</strong>
+          {{ selectedDevice?.no || "N/A" }}
         </p>
         <p class="flex items-center">
-          <i class="material-icons text-blue-500 mr-2">tag</i> 
-          <strong class="text-gray-800 mr-2">ID:</strong> {{ selectedDevice?.id || "N/A" }}
+          <i class="material-icons text-blue-500 mr-2">tag</i>
+          <strong class="text-gray-800 mr-1">ID:</strong>
+          {{ selectedDevice?.id || "N/A" }}
         </p>
-        <p class="flex items-center">
-          <i class="material-icons mr-2"
-             [ngClass]="{
-               'text-blue-500': selectedDevice?.status === 'ใช้งานปกติ',
-               'text-gray-500': selectedDevice?.status === 'ใช้งานไม่ได้'
-             }">
-            cloud
-          </i> 
-          <strong class="text-gray-800 mr-2">Status:</strong>
-          <span [ngClass]="{
-            'text-green-500': selectedDevice?.status === 'ใช้งานปกติ',
-            'text-red-500': selectedDevice?.status === 'ใช้งานไม่ได้'
-          }">
+
+        <!-- Device Type แยกออกมา -->
+        <div class="device-type-container col-span-2">
+          <i class="material-icons text-blue-500">developer_board</i>
+          <strong class="device-type-text">Device Type:</strong>
+          <span class="device-type-text">{{
+            selectedDevice?.device_type_name || "Unknown"
+          }}</span>
+        </div>
+
+        <!-- Status และ Latitude -->
+        <div class="status-container">
+          <i class="material-icons text-blue-500">cloud</i>
+          <strong class="status-text">Status:</strong>
+          <span
+            [ngClass]="{
+              'text-green-500': selectedDevice?.status === 'ใช้งานปกติ',
+              'text-red-500': selectedDevice?.status === 'ใช้งานไม่ได้'
+            }"
+          >
             {{ selectedDevice?.status || "N/A" }}
           </span>
-        </p>
-        
+        </div>
+
+        <div class="lat-long-container mt-3">
+          <p class="flex items-center">
+            <i class="material-icons text-green-500">place</i>
+            <strong class="lat-long-text mr-1">Latitude:</strong>
+            {{ selectedDevice?.latitude || "N/A" }}
+          </p>
+        </div>
+
+        <!-- Longitude -->
         <p class="flex items-center">
-          <i class="material-icons text-green-500 mr-2">place</i> 
-          <strong class="text-gray-800 mr-2">Latitude:</strong> {{ selectedDevice?.latitude || "N/A" }}
-        </p>
-        <p class="flex items-center">
-          <i class="material-icons text-green-500 mr-2">place</i> 
-          <strong class="text-gray-800 mr-2">Longitude:</strong> {{ selectedDevice?.longitude || "N/A" }}
+          <i class="material-icons text-green-500">place</i>
+          <strong class="lat-long-text mr-1">Longitude:</strong>
+          {{ selectedDevice?.longitude || "N/A" }}
         </p>
       </div>
     </div>
@@ -412,41 +469,57 @@
     <!-- ข้อมูลเพิ่มเติม -->
     <div class="bg-gray-50 p-6 rounded-lg shadow-md">
       <h6 class="text-2xl font-semibold text-gray-700 flex items-center gap-2">
-        <i class="material-icons text-indigo-500">settings</i>
-        Additional Details
+        <i class="material-icons text-indigo-500">bar_chart</i>
+        Sensor Values
       </h6>
-      <div class="mt-4 grid grid-cols-2 gap-x-6 gap-y-4 text-base">
-        <p class="flex items-center">
-          <i class="material-icons text-blue-500 mr-1">bar_chart</i>
-          <strong class="text-gray-800 mr-1">Value 1:</strong> {{ selectedDevice?.value1 || "N/A" }}
-        </p>
-        <p class="flex items-center">
-          <i class="material-icons text-blue-500 mr-1">bar_chart</i>
-          <strong class="text-gray-800 mr-1">Value 2:</strong> {{ selectedDevice?.value2 || "N/A" }}
-        </p>
+      <div *ngIf="selectedDevice?.values && selectedDevice.values.length > 0">
+        <table class="w-full text-sm text-left text-gray-700">
+          <thead class="text-xs text-white uppercase bg-gray-400">
+            <tr>
+              <th class="px-4 py-3">Value Name</th>
+              <th class="px-4 py-3">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let value of selectedDevice.values">
+              <td class="px-4 py-3">{{ value.value_name }}</td>
+              <td class="px-4 py-3">{{ value.value || "N/A" }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      <p
+        *ngIf="!selectedDevice?.values || selectedDevice.values.length === 0"
+        class="text-gray-500"
+      >
+        No values available
+      </p>
     </div>
 
-   <!-- ข้อมูลผู้ใช้ (Added By & Updated By) -->
-   <div class="section">
-    <h6><i class="material-icons text-blue-500">person</i> User Information</h6>
-    <div class="grid-cols-2">
-      <div class="flex items-center">
-        <i class="material-icons text-green-500 mr-2">person_add</i>
-        <div>
-          <strong class="text-gray-800">Added By:</strong> 
-          <p class="text-gray-600">{{ selectedDevice?.added_by || "N/A" }}</p>
+    <!-- ข้อมูลผู้ใช้ (Added By & Updated By) -->
+    <div class="section">
+      <h6>
+        <i class="material-icons text-blue-500">person</i> User Information
+      </h6>
+      <div class="grid-cols-2">
+        <div class="flex items-center">
+          <i class="material-icons text-green-500 mr-2">person_add</i>
+          <div>
+            <strong class="text-gray-800">Added By:</strong>
+            <p class="text-gray-600">{{ selectedDevice?.added_by || "N/A" }}</p>
+          </div>
         </div>
-      </div>
-      <div class="flex items-center">
-        <i class="material-icons text-indigo-500 mr-2">edit</i>
-        <div>
-          <strong class="text-gray-800">Updated By:</strong> 
-          <p class="text-gray-600">{{ selectedDevice?.updated_by || "N/A" }}</p>
+        <div class="flex items-center">
+          <i class="material-icons text-indigo-500 mr-2">edit</i>
+          <div>
+            <strong class="text-gray-800">Updated By:</strong>
+            <p class="text-gray-600">
+              {{ selectedDevice?.updated_by || "N/A" }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
     <!-- เวลาที่สร้างและอัปเดต (Created At & Updated At) -->
     <div class="section">
@@ -455,40 +528,44 @@
         <div class="flex items-center">
           <i class="material-icons text-blue-500 mr-2">calendar_today</i>
           <div>
-            <strong class="text-gray-800">Created At:</strong> 
-            <p class="text-gray-600">{{ selectedDevice?.created_at || "N/A" }}</p>
+            <strong class="text-gray-800">Created At:</strong>
+            <p class="text-gray-600">
+              {{ selectedDevice?.created_at || "N/A" }}
+            </p>
           </div>
         </div>
         <div class="flex items-center">
           <i class="material-icons text-gray-500 mr-2">update</i>
           <div>
-            <strong class="text-gray-800">Updated At:</strong> 
-            <p class="text-gray-600">{{ selectedDevice?.updated_at || "N/A" }}</p>
+            <strong class="text-gray-800">Updated At:</strong>
+            <p class="text-gray-600">
+              {{ selectedDevice?.updated_at || "N/A" }}
+            </p>
           </div>
         </div>
       </div>
     </div>
 
-     <!-- Description -->
-     <div class="description">
-      <h6><i class="material-icons text-blue-500">description</i> Description</h6>
+    <!-- Description -->
+    <div class="description">
+      <h6>
+        <i class="material-icons text-blue-500">description</i> Description
+      </h6>
       <p>{{ selectedDevice?.description || "N/A" }}</p>
     </div>
-
   </div>
 </div>
 
-
 <!-- Modal สำหรับขยายรูปภาพ -->
 <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-xxl">
     <div class="modal-content">
       <div class="modal-header border-0">
-        <h5 class="modal-title" id="imageModalLabel">Device Image</h5>
+        <h1 class="modal-title text-gray-800 font-bold" id="imageModalLabel">Device Image</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body text-center">
-        <img [src]="selectedImage" alt="Device Image" class="img-fluid rounded shadow" style="max-width: 100%;">
+      <div class="modal-body image-modal-container">
+        <img [src]="selectedImage" alt="Device Image" class="img-fluid image-modal" />
       </div>
     </div>
   </div>

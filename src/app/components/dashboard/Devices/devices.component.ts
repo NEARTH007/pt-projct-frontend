@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import moment from 'moment';
 
-
 @Component({
   selector: 'app-devices',
   templateUrl: './devices.component.html',
@@ -21,29 +20,32 @@ export class DevicesComponent implements OnInit {
   totalPages: number = 0;
   private bootstrap: any;
 
+  deviceTypes: any[] = []; // ✅ เพิ่มตัวแปรเพื่อเก็บข้อมูลประเภทอุปกรณ์
+
   newDevice = {
     id: 0,
     name: '',
     description: '',
     latitude: '',
     longitude: '',
-    image: '' as string | File,
+    deviceTypeId: '',  // ✅ เพิ่ม deviceTypeId
     status: 'ใช้งานปกติ',
-    value1: '' as string,
-    value2: '' as string,
-  };
+    image: '' as string | File,
+};
 
-  editDeviceData = {
-    id: 0,
-    name: '',
-    description: '',
-    latitude: '',
-    longitude: '',
-    image: '' as string | File,
-    status: 'ใช้งานปกติ',
-    value1: '' as string,
-    value2: '' as string,
-  };
+
+editDeviceData = {
+  id: 0,
+  name: '',
+  description: '',  // ✅ เพิ่ม description 
+  latitude: '',
+  longitude: '',
+  image: '' as string | File,
+  status: 'ใช้งานปกติ',
+  values: [] as { value_name: string; value: string }[],
+  device_type_name: 'Unknown', 
+};
+
 
   isCreateModalOpen: boolean = false;
   isEditModalOpen: boolean = false;
@@ -64,10 +66,10 @@ export class DevicesComponent implements OnInit {
     if (savedPage) {
       this.currentPage = parseInt(savedPage, 10);
     }
-    this.fetchDevices(); // Fetch devices from API
-    this.getUserProfile(); // Load user profile
+    this.fetchDevices();
+    this.getUserProfile();
+    this.fetchDeviceTypes(); 
   }
-  
 
   openOffcanvas(): void {
     const offcanvasElement =
@@ -94,31 +96,30 @@ export class DevicesComponent implements OnInit {
 
   openOffcanvasWithDevice(device: any): void {
     const index = this.devices.findIndex((d) => d.id === device.id);
-    
+
     this.authService.getDeviceById(device.id).subscribe(
       (deviceDetails: any) => {
         const formattedDeviceDetails = {
           ...deviceDetails,
-          no: index !== -1 ? this.devices[index].no : "N/A", // ✅ ใช้ NO ตามลำดับที่เรียงแล้ว
-          created_at: moment(deviceDetails.created_at).format('YYYY-MM-DD HH:mm:ss'),
-          updated_at: moment(deviceDetails.updated_at).format('YYYY-MM-DD HH:mm:ss'),
+          no: index !== -1 ? this.devices[index].no : 'N/A',
+          created_at: moment(deviceDetails.created_at).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ),
+          updated_at: moment(deviceDetails.updated_at).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ),
           image_url: deviceDetails.image_url || null,
         };
-  
+
         this.authService.getDeviceValues(device.id).subscribe(
           (values: any) => {
-            if (values && values.length > 0) {
-              formattedDeviceDetails.value1 = values[0].value1 || 'N/A';
-              formattedDeviceDetails.value2 = values[0].value2 || 'N/A';
-            } else {
-              formattedDeviceDetails.value1 = 'N/A';
-              formattedDeviceDetails.value2 = 'N/A';
-            }
-  
+            formattedDeviceDetails.values = values || [];
+
             this.selectedDevice = formattedDeviceDetails;
-            console.log("📌 Selected Device (Offcanvas):", this.selectedDevice); // ✅ Debug ดูค่า NO
-  
-            const offcanvasElement = this.el.nativeElement.querySelector('#offcanvasRight');
+            console.log('📌 Selected Device (Offcanvas):', this.selectedDevice);
+
+            const offcanvasElement =
+              this.el.nativeElement.querySelector('#offcanvasRight');
             if (offcanvasElement) {
               const offcanvas = new this.bootstrap.Offcanvas(offcanvasElement);
               offcanvas.show();
@@ -134,8 +135,6 @@ export class DevicesComponent implements OnInit {
       }
     );
   }
-  
-  
 
   viewDeviceOnMap(device: any): void {
     if (device.latitude && device.longitude) {
@@ -152,9 +151,7 @@ export class DevicesComponent implements OnInit {
         'This device does not have valid coordinates.',
         'error'
       );
-      
     }
-    
   }
 
   setActiveMenu(menu: string): void {
@@ -192,31 +189,38 @@ export class DevicesComponent implements OnInit {
   fetchDevices(): void {
     this.authService.getDevices().subscribe(
       (devices) => {
-        // ✅ เรียงอุปกรณ์ตาม `created_at` โดยตัวที่เก่าที่สุดจะมีลำดับ NO น้อยที่สุด
-        devices.sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        console.log("📌 Devices from API:", devices); // ✅ ตรวจสอบว่าข้อมูลถูกดึงมา
+        if (!devices || devices.length === 0) {
+          console.warn("⚠️ No devices found for this user.");
+        }
   
-        // ✅ เพิ่ม NO ตามลำดับที่เรียงแล้ว
+        devices.sort(
+          (a: any, b: any) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+  
         this.devices = devices.map((device, index) => ({
           ...device,
-          no: index + 1, // ✅ กำหนด NO ใหม่
+          no: index + 1,
           image_url: device.image_url || null,
           status: device.status,
+          device_type_name: device.device_type_name || 'Unknown',
           added_by: device.added_by || 'Unknown',
           updated_by: device.updated_by || 'Unknown',
           created_at: device.created_at || 'Unknown',
           updated_at: device.updated_at || 'Unknown',
-          value1: device.value1 || "N/A",
-          value2: device.value2 || "N/A",
         }));
   
-        this.calculatePagination(); // ✅ อัปเดตการแบ่งหน้า
+        console.log("📌 Processed Devices:", this.devices); // ✅ ตรวจสอบหลังจากจัดรูปแบบแล้ว
+  
+        this.calculatePagination();
       },
       (error) => {
+        console.error("🚨 Failed to fetch devices:", error);
         Swal.fire('Error', 'Failed to fetch devices', 'error');
       }
     );
   }
-  
   
 
   calculatePagination(): void {
@@ -246,18 +250,36 @@ export class DevicesComponent implements OnInit {
       description: '',
       latitude: '',
       longitude: '',
-      image: '',
+      image: '' as string | File,
       status: 'ใช้งานปกติ',
-      value1: '' as string,
-      value2: '' as string,
+      deviceTypeId: '', // ✅ เพิ่ม deviceTypeId
     };
     this.isCreateModalOpen = true;
   }
 
   openEditModal(device: any): void {
-    this.editDeviceData = { ...device, image: device.image || '' };
-    this.isEditModalOpen = true;
+    this.authService.getDeviceById(device.id).subscribe(
+      (deviceDetails: any) => {
+        this.authService.getDeviceValues(device.id).subscribe(
+          (values: any) => {
+            this.editDeviceData = {
+              ...deviceDetails,
+              description: deviceDetails.description || '', // ✅ โหลดค่า description
+              values: values || [],
+            };
+            this.isEditModalOpen = true;
+          },
+          (error) => {
+            Swal.fire('Error', 'Failed to fetch device values', 'error');
+          }
+        );
+      },
+      (error) => {
+        Swal.fire('Error', 'Failed to fetch device details', 'error');
+      }
+    );
   }
+  
 
   openDeleteModal(device: any): void {
     this.selectedDevice = device;
@@ -275,22 +297,37 @@ export class DevicesComponent implements OnInit {
     }
   }
 
+
+
   isImageModalOpen: boolean = false;
   selectedImage: string | null = null;
 
-
-  openImageModal(imageUrl: string): void {
-    this.selectedImage = imageUrl;
+  openImageModal(imageUrl: string, deviceName: string = "Unknown Device"): void {
+    if (!imageUrl) {
+      console.error('No image URL provided.');
+      return;
+    }
   
     const modalElement = document.getElementById('imageModal');
     if (modalElement) {
       const modal = new this.bootstrap.Modal(modalElement);
+      this.selectedImage = imageUrl;
+  
+      // ✅ ตั้งชื่อ Modal ให้ตรงกับอุปกรณ์ที่กด
+      setTimeout(() => {
+        const modalTitle = document.getElementById('imageModalLabel');
+        if (modalTitle) {
+          modalTitle.innerText = deviceName;
+        }
+      }, 100);
+  
       modal.show();
+    } else {
+      console.error('Modal element not found.');
     }
   }
   
-  
-  
+
   closeImageModal(): void {
     this.isImageModalOpen = false;
     this.selectedImage = null;
@@ -303,50 +340,65 @@ export class DevicesComponent implements OnInit {
     formData.append('latitude', this.newDevice.latitude);
     formData.append('longitude', this.newDevice.longitude);
     formData.append('status', this.newDevice.status);
-    formData.append('value1', this.newDevice.value1 || '');
-    formData.append('value2', this.newDevice.value2 || '');
-    if (this.newDevice.image) {
-      formData.append('device_image', this.newDevice.image);
+    formData.append('deviceTypeId', this.newDevice.deviceTypeId); // ✅ ส่ง deviceTypeId ไป Backend
+  
+    if (this.newDevice.image instanceof File) {
+      formData.append('device_image', this.newDevice.image); // ✅ ส่งรูปภาพไปด้วย
     }
   
-    // Debug ข้อมูล FormData
-    for (let pair of formData.entries()) {
-      console.log(`${pair[0]}: ${pair[1]}`);
-    }
+    console.log("📤 Sending Data:", Object.fromEntries(formData.entries())); // Debugging
   
     this.authService.addDevice(formData).subscribe(
-      () => {
+      (response) => {
         Swal.fire('Success', 'Device added successfully', 'success');
         this.isCreateModalOpen = false;
-        this.fetchDevices();
+        this.fetchDevices(); // รีเฟรชข้อมูล
       },
       (error) => {
         Swal.fire('Error', 'Failed to add device', 'error');
       }
     );
   }
-  
-  
 
+  fetchDeviceTypes(): void {
+    this.authService.getDeviceTypes().subscribe(
+      (types) => {
+        this.deviceTypes = types; // ✅ เก็บค่า Device Types
+        console.log("📌 Device Types Loaded:", this.deviceTypes); // Debugging
+      },
+      (error) => {
+        Swal.fire('Error', 'Failed to fetch device types', 'error');
+      }
+    );
+  }
+  
+  
+  // ✅ ปรับให้ค่าถูกต้องเมื่ออัปเดตอุปกรณ์
   editDevice(): void {
     const formData = new FormData();
     formData.append('name', this.editDeviceData.name);
-    formData.append('description', this.editDeviceData.description);
+    formData.append('description', this.editDeviceData.description); // ✅ ส่งค่า description
     formData.append('latitude', this.editDeviceData.latitude);
     formData.append('longitude', this.editDeviceData.longitude);
     formData.append('status', this.editDeviceData.status);
-    formData.append('value1', this.editDeviceData.value1); // Include value1
-    formData.append('value2', this.editDeviceData.value2); // Include value2
+  
+    if (this.editDeviceData.values && this.editDeviceData.values.length > 0) {
+      formData.append('values', JSON.stringify(this.editDeviceData.values));
+    } else {
+      formData.append('values', JSON.stringify([]));
+    }
   
     if (this.editDeviceData.image instanceof File) {
       formData.append('device_image', this.editDeviceData.image);
     }
   
+    console.log('📤 Sending FormData:', Object.fromEntries(formData.entries()));
+  
     this.authService.editDevice(this.editDeviceData.id, formData).subscribe(
       () => {
         Swal.fire('Success', 'Device updated successfully', 'success');
-        this.isEditModalOpen = false; // Close modal
-        this.fetchDevices(); // Refresh the list
+        this.isEditModalOpen = false;
+        this.fetchDevices();
       },
       (error) => {
         Swal.fire('Error', 'Failed to update device', 'error');
@@ -354,8 +406,7 @@ export class DevicesComponent implements OnInit {
     );
   }
   
-  
-
+  imagePreviewUrl: string | null = null; // ใช้เก็บ URL รูปภาพที่ preview
 
   onImageSelected(event: any, type: 'add' | 'edit'): void {
     const file: File = event.target.files[0];
@@ -363,13 +414,25 @@ export class DevicesComponent implements OnInit {
       Swal.fire('Error', 'No file selected', 'error');
       return;
     }
-
+  
     if (type === 'add') {
       this.newDevice.image = file;
     } else if (type === 'edit') {
       this.editDeviceData.image = file;
     }
+  
+    // สร้าง preview URL ของรูปภาพ
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.imagePreviewUrl = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
+  // 🟢 ฟังก์ชันลบรูปภาพ
+removeImage(): void {
+  this.imagePreviewUrl = null;
+  this.newDevice.image = '' as string | File;
+}
 
   deleteDevice(device: any): void {
     const swalWithBootstrapButtons = Swal.mixin({
@@ -423,9 +486,7 @@ export class DevicesComponent implements OnInit {
   }
 
   getUserProfile(): void {
-    this.authService
-      .getUserProfile(localStorage.getItem('token') || '')
-      .subscribe(
+    this.authService.getUserProfile().subscribe(
         (profile) => {
           this.userProfile = profile;
         },
@@ -447,12 +508,16 @@ export class DevicesComponent implements OnInit {
       }
     );
   }
-  
+
   editDeviceValues(valueId: number, value1: string, value2: string): void {
     const payload = { value1, value2 };
     this.authService.editDeviceValues(valueId, payload).subscribe(
       () => {
-        Swal.fire('Success', 'Values updated successfully and timestamp refreshed', 'success');
+        Swal.fire(
+          'Success',
+          'Values updated successfully and timestamp refreshed',
+          'success'
+        );
         this.fetchDevices(); // อัปเดตรายการอุปกรณ์ใหม่
       },
       (error) => {
@@ -460,9 +525,7 @@ export class DevicesComponent implements OnInit {
       }
     );
   }
-  
-  
-  
+
   getDeviceValues(deviceId: number): void {
     this.authService.getDeviceValues(deviceId).subscribe(
       (values) => {
@@ -473,4 +536,4 @@ export class DevicesComponent implements OnInit {
       }
     );
   }
-}  
+}

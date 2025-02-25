@@ -1,0 +1,41 @@
+/* เอฟเฟกต์โมดาลของรูป */
+.fade-enter {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  
+  .fade-enter-active {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .fade-leave {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  .fade-leave-active {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* เอฟเฟกต์เวลา Hover บนรูป */
+  img {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  img:hover {
+    transform: scale(1.1);
+  }
+  
+  /* ปุ่ม Camera */
+  button {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  button:hover {
+    transform: scale(1.1);
+  }
+  

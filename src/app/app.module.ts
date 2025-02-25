@@ -17,8 +17,8 @@ import { NavbarComponent } from "./components/dashboard/navbar/navbar.component"
 import { NotFountComponent } from "./components/dashboard/not-fount/not-fount.component";
 import { DashboardIotmapDeviceComponent } from "./components/dashboard/dashboard-iotmap-device/dashboard-iotmap-device.component";
 import { BoardComponent } from "./components/board/board.component";
-
-
+import { RequestPasswordResetComponent } from "./components/request-password-reset/request-password-reset.component";
+import { ResetPasswordComponent } from "./components/reset-password/reset-password.component";
 
 
 
@@ -44,6 +44,8 @@ import { BoardComponent } from "./components/board/board.component";
     UserManagementComponent,
     DashboardIotmapDeviceComponent,
     BoardComponent,
+    RequestPasswordResetComponent,
+    ResetPasswordComponent,
     RouterModule.forRoot(routes),
     
 

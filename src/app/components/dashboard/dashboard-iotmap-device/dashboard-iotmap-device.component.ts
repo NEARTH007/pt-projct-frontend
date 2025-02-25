@@ -3,7 +3,6 @@ import * as L from 'leaflet';
 import { AuthService } from '../../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // Define a blue custom icon with increased size
@@ -68,7 +67,6 @@ export class DashboardIotmapDeviceComponent implements AfterViewInit {
               icon: customIcon,
             }).addTo(this.map);
 
-            // Add Tooltip
             marker.bindTooltip(
               `
                 <div style="font-size: 14px; font-weight: bold;">
@@ -89,42 +87,8 @@ export class DashboardIotmapDeviceComponent implements AfterViewInit {
             );
 
             marker.on('click', () => {
-              this.authService.getDeviceById(device.id).subscribe(
-                (deviceDetails) => {
-                  const formattedDeviceDetails = {
-                    ...deviceDetails,
-                    value1: 'N/A', // Default values in case they're not fetched
-                    value2: 'N/A',
-                  };
-            
-                  // Fetch value1 and value2 separately
-                  this.authService.getDeviceValues(device.id).subscribe(
-                    (values: any) => {
-                      if (values && values.length > 0) {
-                        formattedDeviceDetails.value1 = values[0]?.value1 || 'N/A';
-                        formattedDeviceDetails.value2 = values[0]?.value2 || 'N/A';
-                      }
-            
-                      // Assign fetched details to `selectedDevice`
-                      this.selectedDevice = formattedDeviceDetails;
-            
-                      // Open Offcanvas
-                      const offcanvasElement = document.getElementById('offcanvasMapDetails');
-                      if (offcanvasElement && this.bootstrap) {
-                        const offcanvas = new this.bootstrap.Offcanvas(offcanvasElement);
-                        offcanvas.show();
-                      }
-                    },
-                    (error) => {
-                      console.error('Failed to fetch device values:', error);
-                    }
-                  );
-                },
-                (error) => {
-                  console.error('Failed to fetch device details:', error);
-                }
-              );
-            });            
+              this.openDeviceDetails(device);
+            });
           }
         });
       },
@@ -134,23 +98,69 @@ export class DashboardIotmapDeviceComponent implements AfterViewInit {
     );
   }
 
+
+  openDeviceDetails(device: any): void {
+    this.authService.getDeviceById(device.id).subscribe(
+      (deviceDetails) => {
+        const formattedDeviceDetails = {
+          ...deviceDetails,
+          no: device.no || 'N/A',
+          created_at: deviceDetails.created_at || 'N/A',
+          updated_at: deviceDetails.updated_at || 'N/A',
+          image_url: deviceDetails.image_url || null,
+        };
+
+        this.authService.getDeviceValues(device.id).subscribe(
+          (values: any) => {
+            formattedDeviceDetails.values = values || [];
+            this.selectedDevice = formattedDeviceDetails;
+
+            // เปิด Offcanvas
+            const offcanvasElement =
+              document.getElementById('offcanvasMapDetails');
+            if (offcanvasElement && this.bootstrap) {
+              const offcanvas = new this.bootstrap.Offcanvas(offcanvasElement);
+              offcanvas.show();
+            }
+          },
+          (error) => {
+            console.error('Failed to fetch device values:', error);
+          }
+        );
+      },
+      (error) => {
+        console.error('Failed to fetch device details:', error);
+      }
+    );
+  }
+
   selectedImage: string | null = null;
 
-openImageModal(imageUrl: string): void {
-  if (!imageUrl) {
-    console.error("No image URL provided.");
-    return;
+  openImageModal(imageUrl: string): void {
+    if (!imageUrl) {
+      console.error('No image URL provided.');
+      return;
+    }
+  
+    const modalElement = document.getElementById('imageModal');
+    if (modalElement) {
+      const modal = new this.bootstrap.Modal(modalElement);
+      this.selectedImage = imageUrl;
+      
+      // ✅ เปลี่ยนชื่อ Modal เป็นชื่ออุปกรณ์
+      setTimeout(() => {
+        const modalTitle = document.getElementById('imageModalLabel');
+        if (modalTitle && this.selectedDevice) {
+          modalTitle.innerText = this.selectedDevice.name || "Unknown Device";
+        }
+      }, 100); 
+  
+      modal.show();
+    } else {
+      console.error('Modal element not found.');
+    }
   }
-
-  const modalElement = document.getElementById('imageModal');
-  if (modalElement) {
-    const modal = new this.bootstrap.Modal(modalElement);
-    this.selectedImage = imageUrl;
-    modal.show();
-  } else {
-    console.error("Modal element not found.");
-  }
-}
+  
 
 
   private zoomToDevice(lat: number, lng: number, status: string): void {

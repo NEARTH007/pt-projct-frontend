@@ -7,6 +7,7 @@ import { UserManagementComponent } from '../user-management/user-management.comp
 import { DashboardIotmapDeviceComponent } from './dashboard-iotmap-device/dashboard-iotmap-device.component';
 import { DevicesComponent } from './Devices/devices.component';
 import { BoardComponent } from '../board/board.component';
+import { AdminGuard } from '../../guards/admin.guard';
 
 
 const routes: Routes = [
@@ -14,16 +15,16 @@ const routes: Routes = [
     path: '',
     component: DashboardComponent,
     children: [
-      { path: 'location', component: LocationComponent },
-      { path: 'devices', component: DevicesComponent },
+      { path: 'devices', component: DevicesComponent }, // ✅ เอา `canActivate: [AdminGuard]` ออก
       { path: 'profile', component: ProfileComponent },
-      { path: 'user-management', component: UserManagementComponent },
+      { path: 'user-management', component: UserManagementComponent, canActivate: [AdminGuard] },
       { path: 'dashboard-iotmap-device', component: DashboardIotmapDeviceComponent },
       { path: 'board', component: BoardComponent },
-      
+      { path: 'login', redirectTo: 'request-password-reset', pathMatch: 'full' },
     ],
   },
 ];
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

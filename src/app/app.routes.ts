@@ -3,12 +3,16 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { NotFountComponent } from './components/dashboard/not-fount/not-fount.component';
+import { RequestPasswordResetComponent } from './components/request-password-reset/request-password-reset.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'request-password-reset', component: RequestPasswordResetComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
   {
     path: 'dashboard',
     loadChildren: () =>
@@ -17,6 +21,7 @@ export const routes: Routes = [
       ),
   },
   { path: '**', component: NotFountComponent },
+ 
 ];
 
 
