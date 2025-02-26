@@ -154,6 +154,15 @@ editDeviceData = {
     }
   }
 
+// 🟢 สร้างตัวแปรสำหรับ Toggle View
+isTableView: boolean = true;
+
+// 🟢 ฟังก์ชันสลับโหมด
+toggleView(): void {
+  this.isTableView = !this.isTableView;
+}
+
+
   setActiveMenu(menu: string): void {
     this.activeMenu = menu; // อัปเดต activeMenu
     this.router.navigate([`/${menu}`]); // นำทางไปยังเส้นทางที่สอดคล้อง
@@ -406,14 +415,14 @@ editDeviceData = {
     );
   }
   
+
+  // 🟢 ฟังก์ชันลบรูปภาพ
   imagePreviewUrl: string | null = null; // ใช้เก็บ URL รูปภาพที่ preview
 
   onImageSelected(event: any, type: 'add' | 'edit'): void {
+    if (!event.target.files.length) return; // ถ้าไม่มีไฟล์ให้ return ออกไปเลย
+  
     const file: File = event.target.files[0];
-    if (!file) {
-      Swal.fire('Error', 'No file selected', 'error');
-      return;
-    }
   
     if (type === 'add') {
       this.newDevice.image = file;
@@ -421,13 +430,21 @@ editDeviceData = {
       this.editDeviceData.image = file;
     }
   
-    // สร้าง preview URL ของรูปภาพ
+    // ✅ สร้าง Preview Image ทันทีที่เลือก
     const reader = new FileReader();
     reader.onload = (e: any) => {
       this.imagePreviewUrl = e.target.result;
     };
     reader.readAsDataURL(file);
+  
+    // ✅ รีเซ็ตค่า input ให้เลือกไฟล์ใหม่ได้ทันที
+    setTimeout(() => {
+      event.target.value = null;
+    }, 100);
   }
+  
+  
+
   // 🟢 ฟังก์ชันลบรูปภาพ
 removeImage(): void {
   this.imagePreviewUrl = null;

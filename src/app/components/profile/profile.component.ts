@@ -84,21 +84,25 @@ closeImageModal() {
     formData.append('email', this.userProfile.email || '');
     formData.append('first_name', this.userProfile.firstName || '');
     formData.append('last_name', this.userProfile.lastName || '');
-    formData.append('role', this.userProfile.role || ''); // เพิ่ม Role
+
+    // ✅ เฉพาะ Admin เท่านั้นที่สามารถอัปเดต Role ได้
+    if (this.userProfile.role === 'Admin') {
+        formData.append('role', this.userProfile.role || '');
+    }
 
     if (this.selectedFile instanceof File) {
-      formData.append('profile_image', this.selectedFile as Blob);
+        formData.append('profile_image', this.selectedFile as Blob);
     }
 
     this.authService.updateUser(this.userProfile.id, formData).subscribe(
-      () => {
-        Swal.fire('Success', 'Profile updated successfully.', 'success').then(() => {
-          window.location.reload(); // Reload the page
-        });
-      },
-      (error) => {
-        Swal.fire('Error', 'Failed to update profile.', 'error');
-      }
+        () => {
+            Swal.fire('Success', 'Profile updated successfully.', 'success').then(() => {
+                window.location.reload(); // Reload the page
+            });
+        },
+        (error) => {
+            Swal.fire('Error', 'Failed to update profile.', 'error');
+        }
     );
-  }
+}
 }

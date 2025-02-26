@@ -77,19 +77,31 @@
         />
       </div>
 
-      <!-- Role -->
-      <div>
-        <label class="block text-lg font-medium text-gray-700">🎭 Role</label>
-        <select
-          [(ngModel)]="userProfile.role"
-          name="role"
-          class="w-full p-3 mt-1 bg-gray-50 border border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-green-400"
-          required
-        >
-          <option value="User">User</option>
-          <option value="Admin">Admin</option>
-        </select>
-      </div>
+<!-- Role -->
+<div>
+  <label class="block text-lg font-medium text-gray-700">🎭 Role</label>
+  
+  <!-- ✅ เฉพาะ Admin เท่านั้นที่สามารถเปลี่ยน Role ได้ -->
+  <select
+    *ngIf="userProfile?.role === 'Admin'"
+    [(ngModel)]="userProfile.role"
+    name="role"
+    class="w-full p-3 mt-1 bg-gray-50 border border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-green-400"
+    required
+  >
+    <option value="User">User</option>
+    <option value="Admin">Admin</option>
+  </select>
+
+  <!-- ✅ ถ้าเป็น User ให้แสดง Role เป็น Text -->
+  <div
+    *ngIf="userProfile?.role === 'User'"
+    class="w-full p-3 mt-1 bg-gray-100 border border-gray-300 text-gray-800 rounded-lg"
+  >
+    {{ userProfile.role }}
+  </div>
+</div>
+
 
       <!-- Submit Button -->
       <div class="flex justify-end">

@@ -147,3 +147,38 @@ img {
 img:hover {
   transform: scale(1.1);
 }
+
+.relative.flex.flex-col.items-center {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button.mt-2 {
+  margin-top: 10px; /* ขยับปุ่มให้ห่างจากรูป */
+}
+
+.upload-btn,
+.delete-btn {
+  width: 120px; /* ปรับขนาดปุ่มใหญ่ขึ้น */
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px; /* ขนาดตัวอักษรใหญ่ขึ้น */
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upload-btn i,
+.delete-btn i {
+  font-size: 20px; /* ปรับขนาดไอคอนให้ใหญ่ขึ้น */
+  margin-right: 8px; /* เพิ่มระยะห่างระหว่างไอคอนกับข้อความ */
+}
+
+.upload-btn:hover,
+.delete-btn:hover {
+  transform: scale(1.1);
+}

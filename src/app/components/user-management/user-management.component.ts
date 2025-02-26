@@ -160,7 +160,11 @@ closeImageModal() {
     }
   }
   
-  
+  // ฟังก์ชันลบรูปภาพ
+removeImage() {
+  this.previewImage = null;
+  this.newUser.profile_image = null;
+}
 
   // Add user
   addUser() {
@@ -198,7 +202,14 @@ closeImageModal() {
       }
     );
   }
-  
+
+
+// ฟังก์ชันลบรูปภาพใน Edit Modal
+removeEditImage() {
+  this.selectedUser.profile_image_preview = null;
+  this.selectedUser.profile_image = null;
+}
+
   editUser() {
     const formData = new FormData();
     formData.append('username', this.selectedUser.username);

@@ -1,17 +1,35 @@
-<div class="p-6">
-  <h1 class="text-2xl font-bold text-green-600 mb-4">Dashboard</h1>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- Bar Chart -->
-    <div class="bg-white rounded-lg shadow-md p-4">
-      <h2 class="text-lg font-semibold text-gray-700 mb-3">Bar Chart</h2>
+<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-10"> 
+  <!-- 🟢 Bar Chart (Device Status) -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-lg font-semibold text-gray-700 mb-3">Device Status</h2>
+    <div style="height: 400px;">
       <canvas id="barChart"></canvas>
     </div>
+  </div>
 
-    <!-- Pie Chart -->
-    <div class="bg-white rounded-lg shadow-md p-4">
-      <h2 class="text-lg font-semibold text-gray-700 mb-3">Pie Chart</h2>
+  <!-- 🔴 Pie Chart (Device Usage) -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-lg font-semibold text-gray-700 mb-3">Device Usage</h2>
+    <div style="height: 280px;">
       <canvas id="pieChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
+  <!-- 🟡 Bar Chart (Devices by Type) -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-lg font-semibold text-gray-700 mb-3">Devices by Type</h2>
+    <div style="height: 400px;">
+      <canvas id="deviceTypeChart"></canvas>
+    </div>
+  </div>
+
+  <!-- 🔵 Pie Chart (User Statistics) -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-lg font-semibold text-gray-700 mb-3">User Statistics</h2>
+    <div style="height: 280px;">
+      <canvas id="userPieChart"></canvas>
     </div>
   </div>
 </div>

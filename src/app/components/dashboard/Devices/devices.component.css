@@ -340,8 +340,8 @@ thead {
 .bg-blue-500 { background-color: #2563eb; } /* น้ำเงินสด */
 .bg-blue-500:hover { background-color: #1d4ed8; }
 
-.bg-red-500 { background-color: #dc2626; } /* แดงสด */
-.bg-red-500:hover { background-color: #b91c1c; }
+.bg-red-500 { background-color: #f8a1a1; } /* แดงสด */
+.bg-red-500:hover { background-color: #db3b3b; }
 
 /* ปรับปุ่ม View on Map ให้ดูสดใส */
 .view-on-map-btn {
@@ -444,4 +444,65 @@ button.absolute {
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
+}
+
+
+/* ปรับสไตล์เฉพาะของ Add Device Modal */
+.device-modal {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  border: 1px solid #ddd;
+}
+
+/* Input Field เฉพาะของ Add Device */
+.device-input-field {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+/* ปรับขนาดของไอคอนให้มีขนาดสมดุล */
+.device-upload-btn {
+  width: 100px;  /* ลดขนาดจาก 50px */
+  height: 45px;
+  font-size: 40px; /* ลดขนาดไอคอนจาก 30px */
+}
+
+.device-delete-btn {
+  width: 100px;  /* ลดขนาดของปุ่มลบให้น้อยกว่าปุ่มอัปโหลด */
+  height: 40px;
+  font-size: 25px; /* ลดขนาดไอคอน ❌ ให้สมดุล */
+}
+
+/* เพิ่ม hover effect */
+.device-upload-btn:hover,
+.device-delete-btn:hover {
+  transform: scale(1.1);
+}
+
+.preview-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 2px solid #ddd;
+  padding: 5px;
+  background-color: #f9f9f9;
+}
+
+.icon-btn {
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
 }

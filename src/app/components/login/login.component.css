@@ -1,11 +1,16 @@
 @media (min-width: 768px) and (max-width: 1024px) {
-    input {
-      font-size: 16px;
-      padding: 10px;
-    }
-  
-    .container {
-      width: 70%; /* ปรับขนาด Container */
-      margin: 0 auto;
-    }
+  input {
+    font-size: 16px;
+    padding: 12px; /* ปรับ Padding ให้ใหญ่ขึ้นนิดนึง */
   }
+
+  .container {
+    width: 60%; /* ปรับขนาด Container */
+    margin: 0 auto;
+  }
+
+  .password-icon {
+    top: 50% !important; /* กำหนดให้ไอคอนอยู่ตรงกลางพอดี */
+    transform: translateY(-50%) !important;
+  }
+}
