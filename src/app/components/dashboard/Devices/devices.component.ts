@@ -343,31 +343,39 @@ toggleView(): void {
   }
 
   addDevice(): void {
+    if (!this.newDevice.name.trim() || !this.newDevice.deviceTypeId.trim()) {
+      Swal.fire('Error', 'Please fill in all required fields!', 'error');
+      return;
+    }
+  
     const formData = new FormData();
     formData.append('name', this.newDevice.name);
     formData.append('description', this.newDevice.description);
     formData.append('latitude', this.newDevice.latitude);
     formData.append('longitude', this.newDevice.longitude);
     formData.append('status', this.newDevice.status);
-    formData.append('deviceTypeId', this.newDevice.deviceTypeId); // ✅ ส่ง deviceTypeId ไป Backend
+    formData.append('deviceTypeId', this.newDevice.deviceTypeId);
   
     if (this.newDevice.image instanceof File) {
-      formData.append('device_image', this.newDevice.image); // ✅ ส่งรูปภาพไปด้วย
+      formData.append('device_image', this.newDevice.image);
     }
   
-    console.log("📤 Sending Data:", Object.fromEntries(formData.entries())); // Debugging
+    console.log("📤 Sending Data:", Object.fromEntries(formData.entries()));
   
     this.authService.addDevice(formData).subscribe(
-      (response) => {
-        Swal.fire('Success', 'Device added successfully', 'success');
-        this.isCreateModalOpen = false;
-        this.fetchDevices(); // รีเฟรชข้อมูล
+      () => {
+        Swal.fire('Success', 'Device added successfully', 'success').then(() => {
+          this.isCreateModalOpen = false;
+          this.fetchDevices(); // รีเฟรชข้อมูล
+        });
       },
       (error) => {
         Swal.fire('Error', 'Failed to add device', 'error');
+        console.error('🚨 Add Device Error:', error);
       }
     );
   }
+  
 
   fetchDeviceTypes(): void {
     this.authService.getDeviceTypes().subscribe(

@@ -314,22 +314,23 @@
       </div>
     </div>
 
-    <!-- 🟢 ปุ่มกด -->
-    <div class="flex justify-end space-x-3 mt-6">
-      <button
-        (click)="closeModal('create')"
-        type="button"
-        class="px-6 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-all duration-300 text-lg"
-      >
-        ❌ Cancel
-      </button>
-      <button
-        type="submit"
-        class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:ring-2 focus:ring-green-300 transition-all duration-300 shadow-md text-lg"
-      >
-        ✅ Add Device
-      </button>
-    </div>
+  <!-- 🟢 ปุ่มกด -->
+<div class="flex justify-end space-x-3 mt-6">
+  <button
+    (click)="closeModal('create')"
+    type="button"
+    class="px-6 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-all duration-300 text-lg"
+  >
+    ❌ Cancel
+  </button>
+  <button
+    (click)="addDevice()"
+    type="button"
+    class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:ring-2 focus:ring-green-300 transition-all duration-300 shadow-md text-lg"
+  >
+    ✅ Add Device
+  </button>
+</div>
   </div>
 </div>
 
